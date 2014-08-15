@@ -1,0 +1,30 @@
+{
+  "name": "webidl-conversions",
+  "version": "1.0.0-pre",
+  "description": "Implements the WebIDL algorithms for converting to and from JavaScript values",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha --compilers js:mocha-traceur test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/domenic/webidl-conversions"
+  },
+  "keywords": [
+    "webidl",
+    "web",
+    "types"
+  ],
+  "files": [
+    "lib/",
+    "LICENSE.md"
+  ],
+  "author": "Domenic Denicola <domenic@domenicdenicola.com> (http://domenic.me/)",
+  "license": "BSD-2-Clause",
+  "bugs": "https://github.com/domenic/webidl-conversions/issues",
+  "devDependencies": {
+    "mocha": "^1.21.4",
+    "mocha-traceur": "domenic/mocha-traceur#patch-1",
+    "traceur": "^0.0.58"
+  }
+}
