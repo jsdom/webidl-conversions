@@ -37,9 +37,7 @@ describe("WebIDL DOMString type", () => {
     });
 
     it("should throw a TypeError for a symbol", () => {
-        assert.throws(() => {
-            sut(new Symbol());
-        }, TypeError);
+        assert.throws(() => sut(new Symbol()), TypeError);
     });
 
     it("should prefer toString to valueOf on objects", () => {

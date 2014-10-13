@@ -26,9 +26,11 @@ This package's main module's default export is an object with a variety of metho
 
 ## Status
 
-So far only `boolean` and `DOMString` types are implemented. This list will grow over time in service of the [HTML as Custom Elements](https://github.com/dglazkov/html-as-custom-elements) project, but in the meantime, pull requests welcome!
+So far only `boolean`, `DOMString`, and `double` types are implemented. This list will grow over time in service of the [HTML as Custom Elements](https://github.com/dglazkov/html-as-custom-elements) project, but in the meantime, pull requests welcome!
 
 I'm not sure yet what the strategy will be for modifiers, e.g. [`[Clamp]`](http://heycam.github.io/webidl/#Clamp). Maybe something like `conversions["unsigned long"](x, { clamp: true })`? We'll see.
+
+We might also want to extend the API to give better error messages, e.g. "Argument 1 of HTMLMediaElement.fastSeek is not a finite floating-point value" instead of "Argument is not a finite floating-point value." This would require passing in more information to the conversion functions than we currently do.
 
 ## Background
 
