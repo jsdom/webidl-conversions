@@ -1,6 +1,6 @@
 {
   "name": "webidl-conversions",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Implements the WebIDL algorithms for converting to and from JavaScript values",
   "main": "lib/index.js",
   "scripts": {
