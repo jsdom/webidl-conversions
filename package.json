@@ -26,5 +26,6 @@
     "transform": [
       "es6ify"
     ]
-  }
+  },
+  "traceur-runner": true
 }
