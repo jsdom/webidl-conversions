@@ -20,7 +20,7 @@
   "devDependencies": {
     "mocha": "^1.21.4",
     "mocha-traceur": "^2.0.0",
-    "traceur": "^0.0.66"
+    "traceur": "^0.0.79"
   },
   "browserify": {
     "transform": [
