@@ -13,10 +13,9 @@
     "types"
   ],
   "files": [
-    "lib/",
-    "LICENSE.md"
+    "lib/"
   ],
-  "author": "Domenic Denicola <domenic@domenicdenicola.com> (http://domenic.me/)",
+  "author": "Domenic Denicola <d@domenic.me> (https://domenic.me/)",
   "license": "BSD-2-Clause",
   "devDependencies": {
     "mocha": "^1.21.4",
