@@ -5,7 +5,7 @@ This package implements, in JavaScript, the algorithms to convert a given JavaSc
 The goal is that you should be able to write code like
 
 ```js
-import conversions from "webidl-conversions";
+const conversions = require("webidl-conversions");
 
 function doStuff(x, y) {
     x = conversions["boolean"](x);
