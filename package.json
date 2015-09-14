@@ -4,7 +4,7 @@
   "description": "Implements the WebIDL algorithms for converting to and from JavaScript values",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha --compilers js:mocha-traceur test/*.js"
+    "test": "mocha test/*.js"
   },
   "repository": "domenic/webidl-conversions",
   "keywords": [
@@ -18,14 +18,6 @@
   "author": "Domenic Denicola <d@domenic.me> (https://domenic.me/)",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "mocha": "^1.21.4",
-    "mocha-traceur": "^2.0.0",
-    "traceur": "^0.0.79"
-  },
-  "browserify": {
-    "transform": [
-      "es6ify"
-    ]
-  },
-  "traceur-runner": true
+    "mocha": "^1.21.4"
+  }
 }

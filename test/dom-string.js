@@ -1,6 +1,6 @@
 var assert = require("assert");
 
-import conversions from "..";
+const conversions = require("..");
 
 describe("WebIDL DOMString type", () => {
     var sut = conversions["DOMString"];

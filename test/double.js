@@ -1,6 +1,6 @@
 var assert = require("assert");
 
-import conversions from "..";
+const conversions = require("..");
 
 // Adapted pretty directly from
 // https://github.com/marcoscaceres/webidl.js/blob/e631bcf2c1ba2d3ea283f5a39ed7bd1470743552/test/WebIDL.Double-tests.js

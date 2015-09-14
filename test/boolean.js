@@ -1,6 +1,6 @@
 var assert = require("assert");
 
-import conversions from "..";
+const conversions = require("..");
 
 describe("WebIDL boolean type", () => {
     var sut = conversions["boolean"];

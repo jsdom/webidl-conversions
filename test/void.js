@@ -1,6 +1,6 @@
 var assert = require("assert");
 
-import conversions from "..";
+const conversions = require("..");
 
 describe("WebIDL void type", () => {
     var sut = conversions["void"];
