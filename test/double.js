@@ -5,9 +5,7 @@ const conversions = require("..");
 // Adapted pretty directly from
 // https://github.com/marcoscaceres/webidl.js/blob/e631bcf2c1ba2d3ea283f5a39ed7bd1470743552/test/WebIDL.Double-tests.js
 
-describe("WebIDL double type", () => {
-    var sut = conversions["double"];
-
+function commonTest(sut) {
     it("should return `0` for `0`", () => {
         assert.strictEqual(sut(0), 0);
     });
@@ -43,6 +41,12 @@ describe("WebIDL double type", () => {
     it("should return `-123.123` for `\" -123.123 \"`", () => {
         assert.strictEqual(sut(" -123.123 "), -123.123);
     });
+}
+
+describe("WebIDL double type", () => {
+    var sut = conversions["double"];
+
+    commonTest(sut);
 
     it("should throw a TypeError for no argument", () => {
         assert.throws(() => sut(), TypeError);
@@ -66,5 +70,35 @@ describe("WebIDL double type", () => {
 
     it("should throw a TypeError for `\" 123,123 \"` (since it becomes `NaN`)", () => {
         assert.throws(() => sut(" 123,123 "), TypeError);
+    });
+});
+
+describe("WebIDL unrestricted double type", () => {
+    var sut = conversions["unrestricted double"];
+
+    commonTest(sut);
+
+    it("should return `NaN` for no argument", () => {
+        assert(isNaN(sut()));
+    });
+
+    it("should return `NaN for `undefined`", () => {
+        assert(isNaN(sut(undefined)));
+    });
+
+    it("should return `NaN for `NaN`", () => {
+        assert(isNaN(sut(NaN)));
+    });
+
+    it("should return `+Infinity` for `+Infinity`", () => {
+        assert.strictEqual(sut(+Infinity), +Infinity);
+    });
+
+    it("should return `-Infinity` for `-Infinity`", () => {
+        assert.strictEqual(sut(-Infinity), -Infinity);
+    });
+
+    it("should return `NaN for `\" 123,123 \"` (since it becomes `NaN`)", () => {
+        assert(isNaN(sut(" 123,123 ")));
     });
 });
