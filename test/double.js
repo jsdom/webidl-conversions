@@ -68,3 +68,67 @@ describe("WebIDL double type", () => {
         assert.throws(() => sut(" 123,123 "), TypeError);
     });
 });
+
+describe("WebIDL unrestricted double type", () => {
+    var sut = conversions["unrestricted double"];
+
+    it("should return `0` for `0`", () => {
+        assert.strictEqual(sut(0), 0);
+    });
+
+    it("should return `42` for `42`", () => {
+        assert.strictEqual(sut(42), 42);
+    });
+
+    it("should return `0` for `null`", () => {
+        assert.strictEqual(sut(null), 0);
+    });
+
+    it("should return `0` for `\"\"`", () => {
+        assert.strictEqual(sut(""), 0);
+    });
+
+    it("should return `0` for `false`", () => {
+        assert.strictEqual(sut(0), 0);
+    });
+
+    it("should return `1` for `true`", () => {
+        assert.strictEqual(sut(null), 0);
+    });
+
+    it("should return `0` for random whitespace", () => {
+        assert.strictEqual(sut(" \t\n\t "), 0);
+    });
+
+    it("should return `123` for `\" 123 \"`", () => {
+        assert.strictEqual(sut(" 123 "), 123);
+    });
+
+    it("should return `-123.123` for `\" -123.123 \"`", () => {
+        assert.strictEqual(sut(" -123.123 "), -123.123);
+    });
+
+    it("should return `NaN` for no argument", () => {
+        assert(isNaN(sut()));
+    });
+
+    it("should return `NaN for `undefined`", () => {
+        assert(isNaN(sut(undefined)));
+    });
+
+    it("should return `NaN for `NaN`", () => {
+        assert(isNaN(sut(NaN)));
+    });
+
+    it("should return `+Infinity` for `+Infinity`", () => {
+        assert.strictEqual(sut(+Infinity), +Infinity);
+    });
+
+    it("should return `-Infinity` for `-Infinity`", () => {
+        assert.strictEqual(sut(-Infinity), -Infinity);
+    });
+
+    it("should return `NaN for `\" 123,123 \"` (since it becomes `NaN`)", () => {
+        assert(isNaN(sut(" 123,123 ")));
+    });
+});
