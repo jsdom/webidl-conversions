@@ -63,8 +63,8 @@ function testNotOk(name, sut, create) {
     });
 }
 
-const objCreators = [
-    [ DataView, () => new DataView(new ArrayBuffer(0)) ]
+const bufferSourceCreators = [
+    { constructor: DataView, creator: () => new DataView(new ArrayBuffer(0)) }
 ];
 
 [
@@ -78,18 +78,18 @@ const objCreators = [
     Uint8ClampedArray,
     Float32Array,
     Float64Array
-].forEach((ctor) => {
-    objCreators.push([ctor, () => new ctor(0)]);
+].forEach((constructor) => {
+    bufferSourceCreators.push({ constructor, creator: () => new constructor(0) });
 });
 
-objCreators.forEach((type) => {
-    const name = type[0].name;
+bufferSourceCreators.forEach((type) => {
+    const name = type.constructor.name;
     const sut = conversions[name];
 
     describe("WebIDL " + name + " type", () => {
-        objCreators.forEach((innerType) => {
-            const name = innerType[0].name;
-            const create = innerType[1];
+        bufferSourceCreators.forEach((innerType) => {
+            const name = innerType.constructor.name;
+            const create = innerType.creator;
 
             (innerType === type ? testOk : testNotOk)(name, sut, create);
         });
@@ -101,9 +101,9 @@ objCreators.forEach((type) => {
 describe("WebIDL ArrayBufferView type", () => {
     const sut = conversions["ArrayBufferView"];
 
-    objCreators.forEach((type) => {
-        const name = type[0].name;
-        const create = type[1];
+    bufferSourceCreators.forEach((type) => {
+        const name = type.constructor.name;
+        const create = type.creator;
 
         (name === "ArrayBuffer" ? testNotOk : testOk)(name, sut, create);
     });
@@ -114,9 +114,9 @@ describe("WebIDL ArrayBufferView type", () => {
 describe("WebIDL BufferSource type", () => {
     const sut = conversions["BufferSource"];
 
-    objCreators.forEach((type) => {
-        const name = type[0].name;
-        const create = type[1];
+    bufferSourceCreators.forEach((type) => {
+        const name = type.constructor.name;
+        const create = type.creator;
 
         testOk(name, sut, create);
     });

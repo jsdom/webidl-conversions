@@ -32,15 +32,21 @@ function test(type) {
             assert.strictEqual(sut(func), func);
         });
 
-        it("should return `async function () {}` for `async function () {}`", supportsAsyncFunction ? () => {
-            const func = eval("(async function () {})");
-            assert.strictEqual(sut(func), func);
-        } : undefined);
+        if (supportsAsyncFunction) {
+            it("should return `async function () {}` for `async function () {}`", () => {
+                const func = eval("(async function () {})");
+                assert.strictEqual(sut(func), func);
+            });
 
-        it("should return `async () => {}` for `async () => {}`", supportsAsyncFunction ? () => {
-            const func = eval("async () => {}");
-            assert.strictEqual(sut(func), func);
-        } : undefined);
+            it("should return `async () => {}` for `async () => {}`", () => {
+                const func = eval("async () => {}");
+                assert.strictEqual(sut(func), func);
+            });
+        } else {
+            it("should return `async function () {}` for `async function () {}`");
+
+            it("should return `async () => {}` for `async () => {}`");
+        }
 
         it("should throw a TypeError for `undefined`", () => {
             assert.throws(() => sut(undefined), TypeError);
