@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-disable no-eval */
 
 const assert = require("assert");
 

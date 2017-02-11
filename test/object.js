@@ -1,11 +1,10 @@
 "use strict";
-
 const assert = require("assert");
 
 const conversions = require("..");
 
 describe("WebIDL object type", () => {
-    const sut = conversions["object"];
+    const sut = conversions.object;
 
     it("should return `{}` for `{}`", () => {
         const obj = {};

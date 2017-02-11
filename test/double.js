@@ -1,9 +1,7 @@
-var assert = require("assert");
+"use strict";
+const assert = require("assert");
 
 const conversions = require("..");
-
-// Adapted pretty directly from
-// https://github.com/marcoscaceres/webidl.js/blob/e631bcf2c1ba2d3ea283f5a39ed7bd1470743552/test/WebIDL.Double-tests.js
 
 function commonTest(sut) {
     it("should return `0` for `0`", () => {
@@ -57,7 +55,7 @@ function commonRestricted(sut) {
     });
 
     it("should throw a TypeError for `+Infinity`", () => {
-        assert.throws(() => sut(+Infinity), TypeError);
+        assert.throws(() => sut(Infinity), TypeError);
     });
 
     it("should throw a TypeError for `-Infinity`", () => {
@@ -83,7 +81,7 @@ function commonUnrestricted(sut) {
     });
 
     it("should return `+Infinity` for `+Infinity`", () => {
-        assert.strictEqual(sut(+Infinity), +Infinity);
+        assert.strictEqual(sut(Infinity), Infinity);
     });
 
     it("should return `-Infinity` for `-Infinity`", () => {
@@ -116,7 +114,7 @@ function commonFloat(sut) {
 }
 
 describe("WebIDL double type", () => {
-    var sut = conversions["double"];
+    const sut = conversions.double;
 
     commonTest(sut);
     commonRestricted(sut);
@@ -124,7 +122,7 @@ describe("WebIDL double type", () => {
 });
 
 describe("WebIDL unrestricted double type", () => {
-    var sut = conversions["unrestricted double"];
+    const sut = conversions["unrestricted double"];
 
     commonTest(sut);
     commonUnrestricted(sut);
@@ -132,7 +130,7 @@ describe("WebIDL unrestricted double type", () => {
 });
 
 describe("WebIDL float type", () => {
-    var sut = conversions["float"];
+    const sut = conversions.float;
 
     commonTest(sut);
     commonRestricted(sut);
@@ -148,7 +146,7 @@ describe("WebIDL float type", () => {
 });
 
 describe("WebIDL unrestricted float type", () => {
-    var sut = conversions["unrestricted float"];
+    const sut = conversions["unrestricted float"];
 
     commonTest(sut);
     commonUnrestricted(sut);

@@ -1,11 +1,10 @@
 "use strict";
-
 const assert = require("assert");
 
 const conversions = require("..");
 
 describe("WebIDL any type", () => {
-    const sut = conversions["any"];
+    const sut = conversions.any;
 
     it("should return `undefined` for `undefined`", () => {
         assert.strictEqual(sut(undefined), undefined);

@@ -1,5 +1,4 @@
 "use strict";
-
 const assert = require("assert");
 
 const conversions = require("..");
@@ -78,20 +77,20 @@ const bufferSourceCreators = [
     Uint8ClampedArray,
     Float32Array,
     Float64Array
-].forEach((constructor) => {
+].forEach(constructor => {
     bufferSourceCreators.push({ constructor, creator: () => new constructor(0) });
 });
 
-bufferSourceCreators.forEach((type) => {
+bufferSourceCreators.forEach(type => {
     const name = type.constructor.name;
     const sut = conversions[name];
 
     describe("WebIDL " + name + " type", () => {
-        bufferSourceCreators.forEach((innerType) => {
-            const name = innerType.constructor.name;
+        bufferSourceCreators.forEach(innerType => {
+            const innerTypeName = innerType.constructor.name;
             const create = innerType.creator;
 
-            (innerType === type ? testOk : testNotOk)(name, sut, create);
+            (innerType === type ? testOk : testNotOk)(innerTypeName, sut, create);
         });
 
         commonNotOk(sut);
@@ -99,9 +98,9 @@ bufferSourceCreators.forEach((type) => {
 });
 
 describe("WebIDL ArrayBufferView type", () => {
-    const sut = conversions["ArrayBufferView"];
+    const sut = conversions.ArrayBufferView;
 
-    bufferSourceCreators.forEach((type) => {
+    bufferSourceCreators.forEach(type => {
         const name = type.constructor.name;
         const create = type.creator;
 
@@ -112,9 +111,9 @@ describe("WebIDL ArrayBufferView type", () => {
 });
 
 describe("WebIDL BufferSource type", () => {
-    const sut = conversions["BufferSource"];
+    const sut = conversions.BufferSource;
 
-    bufferSourceCreators.forEach((type) => {
+    bufferSourceCreators.forEach(type => {
         const name = type.constructor.name;
         const create = type.creator;
 

@@ -1,9 +1,10 @@
-var assert = require("assert");
+"use strict";
+const assert = require("assert");
 
 const conversions = require("..");
 
 describe("WebIDL DOMString type", () => {
-    var sut = conversions["DOMString"];
+    const sut = conversions.DOMString;
 
     it("should return `\"undefined\"` for `undefined`", () => {
         assert.strictEqual(sut(undefined), "undefined");
@@ -25,7 +26,7 @@ describe("WebIDL DOMString type", () => {
         assert.strictEqual(sut(NaN), "NaN");
         assert.strictEqual(sut(+0), "0");
         assert.strictEqual(sut(-0), "0");
-        assert.strictEqual(sut(+Infinity), "Infinity");
+        assert.strictEqual(sut(Infinity), "Infinity");
         assert.strictEqual(sut(-Infinity), "-Infinity");
         assert.strictEqual(sut(10), "10");
         assert.strictEqual(sut(-10), "-10");
@@ -37,11 +38,18 @@ describe("WebIDL DOMString type", () => {
     });
 
     it("should throw a TypeError for a symbol", () => {
-        assert.throws(() => sut(new Symbol()), TypeError);
+        assert.throws(() => sut(Symbol("dummy description")), TypeError);
     });
 
     it("should prefer toString to valueOf on objects", () => {
-        var o = { valueOf() { return 5; }, toString() { return "foo"; } };
+        const o = {
+            valueOf() {
+                return 5;
+            },
+            toString() {
+                return "foo";
+            }
+        };
         assert.strictEqual(sut(o), "foo");
     });
 });

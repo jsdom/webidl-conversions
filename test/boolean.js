@@ -1,9 +1,11 @@
-var assert = require("assert");
+"use strict";
+/* eslint-disable no-new-wrappers */
+const assert = require("assert");
 
 const conversions = require("..");
 
 describe("WebIDL boolean type", () => {
-    var sut = conversions["boolean"];
+    const sut = conversions.boolean;
 
     it("should return `false` for `undefined`", () => {
         assert.strictEqual(sut(undefined), false);
@@ -34,7 +36,7 @@ describe("WebIDL boolean type", () => {
     });
 
     it("should return `true` for symbols", () => {
-        assert.strictEqual(sut(Symbol()), true);
+        assert.strictEqual(sut(Symbol("dummy description")), true);
     });
 
     it("should return `true` for objects", () => {

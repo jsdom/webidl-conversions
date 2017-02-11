@@ -1,11 +1,10 @@
 "use strict";
-
 const assert = require("assert");
 
 const conversions = require("..");
 
 describe("WebIDL object type", () => {
-    const sut = conversions["Error"];
+    const sut = conversions.Error;
 
     it("should return an `Error` for an `Error`", () => {
         const err = new Error();
