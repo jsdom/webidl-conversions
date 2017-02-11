@@ -42,10 +42,6 @@ function test(type) {
                 const func = eval("async () => {}");
                 assert.strictEqual(sut(func), func);
             });
-        } else {
-            it("should return `async function () {}` for `async function () {}`");
-
-            it("should return `async () => {}` for `async () => {}`");
         }
 
         it("should throw a TypeError for `undefined`", () => {
