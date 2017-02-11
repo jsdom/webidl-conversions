@@ -26,9 +26,19 @@ This package's main module's default export is an object with a variety of metho
 
 ## Status
 
-All of the numeric types are implemented (float being implemented as double) and some others are as well - check the source for all of them. This list will grow over time in service of the [HTML as Custom Elements](https://github.com/dglazkov/html-as-custom-elements) project, but in the meantime, pull requests welcome!
+The following types are currently implemented:
 
-I'm not sure yet what the strategy will be for modifiers, e.g. [`[Clamp]`](http://heycam.github.io/webidl/#Clamp). Maybe something like `conversions["unsigned long"](x, { clamp: true })`? We'll see.
+- `any`
+- `boolean`
+- All [numeric types](https://heycam.github.io/webidl/#dfn-numeric-type), `DOMTimeStamp`
+- `DOMString`, `ByteString`, `USVString`
+- `object`
+- All [buffer source types](https://heycam.github.io/webidl/#dfn-buffer-source-type), `ArrayBufferView`, `BufferSource`
+- `Error`
+- `Function`, `VoidFunction`
+- `void`
+
+Extended attributes, e.g. [`[Clamp]`](http://heycam.github.io/webidl/#Clamp) can be used by adding a second `opts` argument, like `conversions["unsigned long"](x, { clamp: true })`.
 
 We might also want to extend the API to give better error messages, e.g. "Argument 1 of HTMLMediaElement.fastSeek is not a finite floating-point value" instead of "Argument is not a finite floating-point value." This would require passing in more information to the conversion functions than we currently do.
 
