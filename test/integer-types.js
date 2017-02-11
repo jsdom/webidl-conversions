@@ -15,15 +15,15 @@ function commonTest(sut) {
     });
 
     it("should return 0 for -0", () => {
-        assertIs(sut(0), 0);
+        assertIs(sut(-0), 0);
     });
 
     it("should return 0 for -0 with [EnforceRange]", () => {
-        assertIs(sut(0, { enforceRange: true }), 0);
+        assertIs(sut(-0, { enforceRange: true }), 0);
     });
 
     it("should return 0 for -0 with [Clamp]", () => {
-        assertIs(sut(0, { clamp: true }), 0);
+        assertIs(sut(-0, { clamp: true }), 0);
     });
 
     it("should return 42 for 42", () => {
