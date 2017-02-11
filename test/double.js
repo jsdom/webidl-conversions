@@ -5,9 +5,7 @@ const conversions = require("..");
 // Adapted pretty directly from
 // https://github.com/marcoscaceres/webidl.js/blob/e631bcf2c1ba2d3ea283f5a39ed7bd1470743552/test/WebIDL.Double-tests.js
 
-describe("WebIDL double type", () => {
-    var sut = conversions["double"];
-
+function commonTest(sut) {
     it("should return `0` for `0`", () => {
         assert.strictEqual(sut(0), 0);
     });
@@ -40,10 +38,12 @@ describe("WebIDL double type", () => {
         assert.strictEqual(sut(" 123 "), 123);
     });
 
-    it("should return `-123.123` for `\" -123.123 \"`", () => {
-        assert.strictEqual(sut(" -123.123 "), -123.123);
+    it("should return `-123.5` for `\" -123.500 \"`", () => {
+        assert.strictEqual(sut(" -123.500 "), -123.5);
     });
+}
 
+function commonRestricted(sut) {
     it("should throw a TypeError for no argument", () => {
         assert.throws(() => sut(), TypeError);
     });
@@ -66,5 +66,99 @@ describe("WebIDL double type", () => {
 
     it("should throw a TypeError for `\" 123,123 \"` (since it becomes `NaN`)", () => {
         assert.throws(() => sut(" 123,123 "), TypeError);
+    });
+}
+
+function commonUnrestricted(sut) {
+    it("should return `NaN` for no argument", () => {
+        assert(isNaN(sut()));
+    });
+
+    it("should return `NaN for `undefined`", () => {
+        assert(isNaN(sut(undefined)));
+    });
+
+    it("should return `NaN for `NaN`", () => {
+        assert(isNaN(sut(NaN)));
+    });
+
+    it("should return `+Infinity` for `+Infinity`", () => {
+        assert.strictEqual(sut(+Infinity), +Infinity);
+    });
+
+    it("should return `-Infinity` for `-Infinity`", () => {
+        assert.strictEqual(sut(-Infinity), -Infinity);
+    });
+
+    it("should return `NaN for `\" 123,123 \"` (since it becomes `NaN`)", () => {
+        assert(isNaN(sut(" 123,123 ")));
+    });
+}
+
+function commonDouble(sut) {
+    it("should return `3.5000000000000004` for `3.5000000000000004`", () => {
+        assert.strictEqual(sut(3.5000000000000004), 3.5000000000000004);
+    });
+
+    it("should return `-3.5000000000000004` for `-3.5000000000000004`", () => {
+        assert.strictEqual(sut(-3.5000000000000004), -3.5000000000000004);
+    });
+}
+
+function commonFloat(sut) {
+    it("should return `3.5` for `3.5000000000000004`", () => {
+        assert.strictEqual(sut(3.5000000000000004), 3.5);
+    });
+
+    it("should return `-3.5` for `-3.5000000000000004`", () => {
+        assert.strictEqual(sut(-3.5000000000000004), -3.5);
+    });
+}
+
+describe("WebIDL double type", () => {
+    var sut = conversions["double"];
+
+    commonTest(sut);
+    commonRestricted(sut);
+    commonDouble(sut);
+});
+
+describe("WebIDL unrestricted double type", () => {
+    var sut = conversions["unrestricted double"];
+
+    commonTest(sut);
+    commonUnrestricted(sut);
+    commonDouble(sut);
+});
+
+describe("WebIDL float type", () => {
+    var sut = conversions["float"];
+
+    commonTest(sut);
+    commonRestricted(sut);
+    commonFloat(sut);
+
+    it("should throw a TypeError for `2 ** 128`", () => {
+        assert.throws(() => sut(Math.pow(2, 128)), TypeError);
+    });
+
+    it("should throw a TypeError for `-(2 ** 128)`", () => {
+        assert.throws(() => sut(-Math.pow(2, 128)), TypeError);
+    });
+});
+
+describe("WebIDL unrestricted float type", () => {
+    var sut = conversions["unrestricted float"];
+
+    commonTest(sut);
+    commonUnrestricted(sut);
+    commonFloat(sut);
+
+    it("should return `Infinity` for `2 ** 128`", () => {
+        assert.strictEqual(sut(Math.pow(2, 128)), Infinity);
+    });
+
+    it("should return `-Infinity` for `-(2 ** 128)`", () => {
+        assert.strictEqual(sut(-Math.pow(2, 128)), -Infinity);
     });
 });
