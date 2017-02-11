@@ -150,6 +150,42 @@ describe("WebIDL octet type", () => {
 
     commonTest(sut);
     commonTestNonFinite(sut);
+
+    generateTests(sut, [
+        [-128, 128],
+        [127, 127],
+        [128, 128],
+        [129, 129],
+        [255, 255],
+        [256, 0],
+        [257, 1],
+        [512, 0],
+        [-1, 255],
+        [-2, 254]
+    ]);
+
+    generateTests(sut, [
+        [-1, 0],
+        [-255, 0],
+        [-256, 0],
+        [-1000, 0],
+        [-Infinity, 0],
+        [127, 127],
+        [128, 128],
+        [255, 255],
+        [256, 255],
+        [10000, 255],
+        [Infinity, 255]
+    ], { clamp: true }, "with [Clamp]");
+
+    generateTests(sut, [
+        [-256, TypeError],
+        [-1, TypeError],
+        [0, 0],
+        [255, 255],
+        [256, TypeError],
+        [10000, TypeError]
+    ], { enforceRange: true }, "with [EnforceRange]");
 });
 
 describe("WebIDL short type", () => {
@@ -157,6 +193,37 @@ describe("WebIDL short type", () => {
 
     commonTest(sut);
     commonTestNonFinite(sut);
+
+    generateTests(sut, [
+        [-32768, -32768],
+        [32767, 32767],
+        [32768, -32768],
+        [32769, -32767],
+        [-32769, 32767],
+        [-32770, 32766],
+        [65536, 0],
+        [65537, 1]
+    ]);
+
+    generateTests(sut, [
+        [-32768, -32768],
+        [-32769, -32768],
+        [-1000000, -32768],
+        [-Infinity, -32768],
+        [32767, 32767],
+        [32768, 32767],
+        [1000000, 32767],
+        [Infinity, 32767]
+    ], { clamp: true }, "with [Clamp]");
+
+    generateTests(sut, [
+        [-32768, -32768],
+        [-32769, TypeError],
+        [-100000, TypeError],
+        [32767, 32767],
+        [32768, TypeError],
+        [100000, TypeError]
+    ], { enforceRange: true }, "with [EnforceRange]");
 });
 
 describe("WebIDL unsigned short type", () => {
@@ -164,6 +231,42 @@ describe("WebIDL unsigned short type", () => {
 
     commonTest(sut);
     commonTestNonFinite(sut);
+
+    generateTests(sut, [
+        [-32768, 32768],
+        [32767, 32767],
+        [32768, 32768],
+        [32769, 32769],
+        [65535, 65535],
+        [65536, 0],
+        [65537, 1],
+        [131072, 0],
+        [-1, 65535],
+        [-2, 65534]
+    ]);
+
+    generateTests(sut, [
+        [-1, 0],
+        [-32767, 0],
+        [-32768, 0],
+        [-100000, 0],
+        [-Infinity, 0],
+        [32767, 32767],
+        [32768, 32768],
+        [65535, 65535],
+        [65536, 65535],
+        [100000, 65535],
+        [Infinity, 65535]
+    ], { clamp: true }, "with [Clamp]");
+
+    generateTests(sut, [
+        [-65536, TypeError],
+        [-1, TypeError],
+        [0, 0],
+        [65535, 65535],
+        [65536, TypeError],
+        [100000, TypeError]
+    ], { enforceRange: true }, "with [EnforceRange]");
 });
 
 describe("WebIDL long type", () => {
@@ -171,6 +274,37 @@ describe("WebIDL long type", () => {
 
     commonTest(sut);
     commonTestNonFinite(sut);
+
+    generateTests(sut, [
+        [-2147483648, -2147483648],
+        [2147483647, 2147483647],
+        [2147483648, -2147483648],
+        [2147483649, -2147483647],
+        [-2147483649, 2147483647],
+        [-2147483650, 2147483646],
+        [4294967296, 0],
+        [4294967297, 1]
+    ]);
+
+    generateTests(sut, [
+        [-2147483648, -2147483648],
+        [-2147483649, -2147483648],
+        [-10000000000, -2147483648],
+        [-Infinity, -2147483648],
+        [2147483647, 2147483647],
+        [2147483648, 2147483647],
+        [10000000000, 2147483647],
+        [Infinity, 2147483647]
+    ], { clamp: true }, "with [Clamp]");
+
+    generateTests(sut, [
+        [-2147483648, -2147483648],
+        [-2147483649, TypeError],
+        [-10000000000, TypeError],
+        [2147483647, 2147483647],
+        [2147483648, TypeError],
+        [10000000000, TypeError]
+    ], { enforceRange: true }, "with [EnforceRange]");
 });
 
 describe("WebIDL unsigned long type", () => {
@@ -178,6 +312,42 @@ describe("WebIDL unsigned long type", () => {
 
     commonTest(sut);
     commonTestNonFinite(sut);
+
+    generateTests(sut, [
+        [-2147483648, 2147483648],
+        [2147483647, 2147483647],
+        [2147483648, 2147483648],
+        [2147483649, 2147483649],
+        [4294967295, 4294967295],
+        [4294967296, 0],
+        [4294967297, 1],
+        [8589934592, 0],
+        [-1, 4294967295],
+        [-2, 4294967294]
+    ]);
+
+    generateTests(sut, [
+        [-1, 0],
+        [-4294967295, 0],
+        [-4294967296, 0],
+        [-10000000000, 0],
+        [-Infinity, 0],
+        [2147483647, 2147483647],
+        [2147483648, 2147483648],
+        [4294967295, 4294967295],
+        [4294967296, 4294967295],
+        [10000000000, 4294967295],
+        [Infinity, 4294967295]
+    ], { clamp: true }, "with [Clamp]");
+
+    generateTests(sut, [
+        [-4294967296, TypeError],
+        [-1, TypeError],
+        [0, 0],
+        [4294967295, 4294967295],
+        [4294967296, TypeError],
+        [10000000000, TypeError]
+    ], { enforceRange: true }, "with [EnforceRange]");
 });
 
 describe("WebIDL long long type", () => {
