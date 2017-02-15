@@ -3,9 +3,19 @@ const assert = require("assert");
 
 const conversions = require("..");
 
+function assertIs(actual, expected, message) {
+    if (!Object.is(actual, expected)) {
+        assert.fail(actual, expected, message, "is", assertIs);
+    }
+}
+
 function commonTest(sut) {
     it("should return `0` for `0`", () => {
         assert.strictEqual(sut(0), 0);
+    });
+
+    it("should return `-0` for `-0`", () => {
+        assertIs(sut(-0), -0);
     });
 
     it("should return `42` for `42`", () => {
