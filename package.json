@@ -20,7 +20,7 @@
   "author": "Domenic Denicola <d@domenic.me> (https://domenic.me/)",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "eslint": "^3.15.0",
+    "eslint": "^6.6.0",
     "mocha": "^1.21.4",
     "nyc": "^10.1.2"
   }
