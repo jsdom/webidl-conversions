@@ -1,6 +1,12 @@
 language: node_js
 node_js:
-  - v4
+  - v8
   - stable
+
 script:
-  npm run lint && npm test
+  - npm run lint
+  - npm test
+
+branches:
+  only:
+    - master

@@ -10,4 +10,5 @@ indent_size = 4
 
 [.eslintrc.json]
 [package.json]
+[.travis.yml]
 indent_size = 2
