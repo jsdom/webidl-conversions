@@ -80,7 +80,7 @@ const bufferSourceConstructors = [
 ];
 
 const bufferSourceCreators = [];
-bufferSourceConstructors.forEach(constructor => {
+for (const constructor of bufferSourceConstructors) {
     bufferSourceCreators.push(
         {
             typeName: constructor.name,
@@ -93,28 +93,39 @@ bufferSourceConstructors.forEach(constructor => {
             creator: () => vm.runInContext(`new ${constructor.name}(new ArrayBuffer(0))`, differentRealm)
         }
     );
-});
+}
 
-bufferSourceConstructors.forEach(type => {
+for (const type of bufferSourceConstructors) {
     const typeName = type.name;
     const sut = conversions[typeName];
 
     describe("WebIDL " + typeName + " type", () => {
-        bufferSourceCreators.forEach(innerType => {
+        for (const innerType of bufferSourceCreators) {
             const testFunction = innerType.typeName === typeName ? testOk : testNotOk;
             testFunction(innerType.label, sut, innerType.creator);
-        });
+        }
 
         commonNotOk(sut);
     });
+}
+
+describe("WebIDL ArrayBufferView type", () => {
+    const sut = conversions.ArrayBufferView;
+
+    for (const { label, typeName, creator } of bufferSourceCreators) {
+        const testFunction = typeName !== "ArrayBuffer" ? testOk : testNotOk;
+        testFunction(label, sut, creator);
+    }
+
+    commonNotOk(sut);
 });
 
 describe("WebIDL BufferSource type", () => {
     const sut = conversions.BufferSource;
 
-    bufferSourceCreators.forEach(type => {
-        testOk(type.label, sut, type.creator);
-    });
+    for (const { label, creator } of bufferSourceCreators) {
+        testOk(label, sut, creator);
+    }
 
     commonNotOk(sut);
 });
