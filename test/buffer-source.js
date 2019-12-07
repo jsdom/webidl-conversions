@@ -1,5 +1,6 @@
 "use strict";
 const assert = require("assert");
+const vm = require("vm");
 
 const conversions = require("..");
 
@@ -62,11 +63,10 @@ function testNotOk(name, sut, create) {
     });
 }
 
-const bufferSourceCreators = [
-    { constructor: DataView, creator: () => new DataView(new ArrayBuffer(0)) }
-];
+const differentRealm = vm.createContext();
 
-[
+const bufferSourceConstructors = [
+    DataView,
     ArrayBuffer,
     Int8Array,
     Int16Array,
@@ -77,47 +77,43 @@ const bufferSourceCreators = [
     Uint8ClampedArray,
     Float32Array,
     Float64Array
-].forEach(constructor => {
-    bufferSourceCreators.push({ constructor, creator: () => new constructor(0) });
+];
+
+const bufferSourceCreators = [];
+bufferSourceConstructors.forEach(constructor => {
+    bufferSourceCreators.push(
+        {
+            typeName: constructor.name,
+            label: `${constructor.name} same realm`,
+            creator: () => new constructor(new ArrayBuffer(0))
+        },
+        {
+            typeName: constructor.name,
+            label: `${constructor.name} different realm`,
+            creator: () => vm.runInContext(`new ${constructor.name}(new ArrayBuffer(0))`, differentRealm)
+        }
+    );
 });
 
-bufferSourceCreators.forEach(type => {
-    const name = type.constructor.name;
-    const sut = conversions[name];
+bufferSourceConstructors.forEach(type => {
+    const typeName = type.name;
+    const sut = conversions[typeName];
 
-    describe("WebIDL " + name + " type", () => {
+    describe("WebIDL " + typeName + " type", () => {
         bufferSourceCreators.forEach(innerType => {
-            const innerTypeName = innerType.constructor.name;
-            const create = innerType.creator;
-
-            (innerType === type ? testOk : testNotOk)(innerTypeName, sut, create);
+            const testFunction = innerType.typeName === typeName ? testOk : testNotOk;
+            testFunction(innerType.label, sut, innerType.creator);
         });
 
         commonNotOk(sut);
     });
 });
 
-describe("WebIDL ArrayBufferView type", () => {
-    const sut = conversions.ArrayBufferView;
-
-    bufferSourceCreators.forEach(type => {
-        const name = type.constructor.name;
-        const create = type.creator;
-
-        (name === "ArrayBuffer" ? testNotOk : testOk)(name, sut, create);
-    });
-
-    commonNotOk(sut);
-});
-
 describe("WebIDL BufferSource type", () => {
     const sut = conversions.BufferSource;
 
     bufferSourceCreators.forEach(type => {
-        const name = type.constructor.name;
-        const create = type.creator;
-
-        testOk(name, sut, create);
+        testOk(type.label, sut, type.creator);
     });
 
     commonNotOk(sut);
