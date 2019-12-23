@@ -9,6 +9,8 @@ function assertIs(actual, expected, message) {
     }
 }
 
+const itBigInt = typeof BigInt === "function" && typeof BigInt(0) === "bigint" ? it : it.skip;
+
 function commonTest(sut) {
     it("should return 0 for 0", () => {
         assertIs(sut(0), 0);
@@ -59,6 +61,10 @@ function commonTest(sut) {
 
     it("should return 123 for \" 123.400 \"", () => {
         assertIs(sut(" 123.400 "), 123);
+    });
+
+    itBigInt("should throw a TypeError for `0n`", () => {
+        assert.throws(() => sut(BigInt(0)), TypeError);
     });
 }
 
