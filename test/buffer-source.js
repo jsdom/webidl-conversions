@@ -1,6 +1,7 @@
 "use strict";
 const assert = require("assert");
 const vm = require("vm");
+const { MessageChannel } = require("worker_threads");
 
 const assertThrows = require("./assertThrows");
 const conversions = require("..");
@@ -52,7 +53,7 @@ function commonNotOk(sut) {
 }
 
 function testOk(name, sut, create) {
-    it("should return `" + name + "` object for `" + name + "` object", () => {
+    it("should return input for `" + name + "` object", () => {
         const obj = create();
         assert.strictEqual(sut(obj), obj);
     });
@@ -65,6 +66,7 @@ function testNotOk(name, sut, create) {
 }
 
 const differentRealm = vm.createContext();
+const { port1 } = new MessageChannel();
 
 const bufferSourceConstructors = [
     DataView,
@@ -80,25 +82,92 @@ const bufferSourceConstructors = [
     Float64Array
 ];
 
-const bufferSourceCreators = [];
+const bufferSourceCreators = [
+    {
+        typeName: "ArrayBuffer",
+        isShared: false,
+        isDetached: false,
+        label: "ArrayBuffer same realm",
+        creator: () => new ArrayBuffer(0)
+    },
+    {
+        typeName: "ArrayBuffer",
+        isShared: false,
+        isDetached: true,
+        label: "ArrayBuffer detached",
+        creator: () => {
+            const value = new ArrayBuffer(0);
+            port1.postMessage(undefined, [value]);
+            return value;
+        }
+    },
+    {
+        typeName: "SharedArrayBuffer",
+        isShared: true,
+        isDetached: false,
+        label: "SharedArrayBuffer same realm",
+        creator: () => new SharedArrayBuffer(0)
+    }
+];
+
 for (const constructor of bufferSourceConstructors) {
+    if (constructor === ArrayBuffer) {
+        continue;
+    }
+
     const { name } = constructor;
     bufferSourceCreators.push(
         {
             typeName: name,
+            isShared: false,
+            isDetached: false,
+            isForged: false,
             label: `${name} same realm`,
             creator: () => new constructor(new ArrayBuffer(0))
         },
         {
             typeName: name,
-            label: `${name} different realm`,
-            creator: () => vm.runInContext(`new ${name}(new ArrayBuffer(0))`, differentRealm)
+            isShared: false,
+            isDetached: true,
+            isForged: false,
+            label: `${name} detached`,
+            creator: () => {
+                const value = new constructor(new ArrayBuffer(0));
+                port1.postMessage(undefined, [value.buffer]);
+                return value;
+            }
         },
         {
             typeName: name,
+            isShared: false,
+            isDetached: false,
+            isForged: false,
+            label: `${name} different realm`,
+            creator: () => vm.runInContext(`new ${constructor.name}(new ArrayBuffer(0))`, differentRealm)
+        },
+        {
+            typeName: name,
+            isShared: true,
+            isDetached: false,
+            isForged: false,
+            label: `${name} SharedArrayBuffer same realm`,
+            creator: () => new constructor(new SharedArrayBuffer(0))
+        },
+        {
+            typeName: name,
+            isShared: true,
+            isDetached: false,
+            isForged: false,
+            label: `${name} SharedArrayBuffer different realm`,
+            creator: () => vm.runInContext(`new ${constructor.name}(new SharedArrayBuffer(0))`, differentRealm)
+        },
+        {
+            typeName: name,
+            isShared: false,
+            isDetached: false,
+            isForged: true,
             label: `forged ${name}`,
-            creator: () => Object.create(constructor.prototype, { [Symbol.toStringTag]: { value: name } }),
-            isForged: true
+            creator: () => Object.create(constructor.prototype, { [Symbol.toStringTag]: { value: name } })
         }
     );
 }
@@ -109,32 +178,68 @@ for (const type of bufferSourceConstructors) {
 
     describe("WebIDL " + typeName + " type", () => {
         for (const innerType of bufferSourceCreators) {
-            const testFunction = innerType.typeName === typeName && !innerType.isForged ? testOk : testNotOk;
+            const testFunction = innerType.typeName === typeName && !innerType.isShared && !innerType.isDetached &&
+                !innerType.isForged ? testOk : testNotOk;
             testFunction(innerType.label, sut, innerType.creator);
         }
 
         commonNotOk(sut);
+
+        describe("with [AllowShared]", () => {
+            const allowSharedSUT = (v, opts) => conversions[typeName](v, { ...opts, allowShared: true });
+
+            for (const { label, creator, typeName: innerTypeName, isDetached, isForged } of bufferSourceCreators) {
+                const testFunction = innerTypeName === typeName && !isDetached && !isForged ? testOk : testNotOk;
+                testFunction(label, allowSharedSUT, creator);
+            }
+
+            commonNotOk(allowSharedSUT);
+        });
     });
 }
 
 describe("WebIDL ArrayBufferView type", () => {
     const sut = conversions.ArrayBufferView;
 
-    for (const { label, typeName, creator, isForged } of bufferSourceCreators) {
-        const testFunction = typeName !== "ArrayBuffer" && !isForged ? testOk : testNotOk;
+    for (const { label, typeName, isShared, isDetached, isForged, creator } of bufferSourceCreators) {
+        const testFunction = typeName !== "ArrayBuffer" && typeName !== "SharedArrayBuffer" &&
+            !isShared && !isDetached && !isForged ? testOk : testNotOk;
         testFunction(label, sut, creator);
     }
 
     commonNotOk(sut);
+
+    describe("with [AllowShared]", () => {
+        const allowSharedSUT = (v, opts) => conversions.ArrayBufferView(v, { ...opts, allowShared: true });
+
+        for (const { label, creator, typeName, isDetached, isForged } of bufferSourceCreators) {
+            const testFunction = typeName !== "ArrayBuffer" && typeName !== "SharedArrayBuffer" && !isDetached &&
+                !isForged ? testOk : testNotOk;
+            testFunction(label, allowSharedSUT, creator);
+        }
+
+        commonNotOk(allowSharedSUT);
+    });
 });
 
 describe("WebIDL BufferSource type", () => {
     const sut = conversions.BufferSource;
 
-    for (const { label, creator, isForged } of bufferSourceCreators) {
-        const testFunction = !isForged ? testOk : testNotOk;
+    for (const { label, creator, isShared, isDetached, isForged } of bufferSourceCreators) {
+        const testFunction = !isShared && !isDetached && !isForged ? testOk : testNotOk;
         testFunction(label, sut, creator);
     }
 
     commonNotOk(sut);
+
+    describe("with [AllowShared]", () => {
+        const allowSharedSUT = (v, opts) => conversions.BufferSource(v, { ...opts, allowShared: true });
+
+        for (const { label, creator, isDetached, isForged } of bufferSourceCreators) {
+            const testFunction = !isDetached && !isForged ? testOk : testNotOk;
+            testFunction(label, allowSharedSUT, creator);
+        }
+
+        commonNotOk(allowSharedSUT);
+    });
 });
