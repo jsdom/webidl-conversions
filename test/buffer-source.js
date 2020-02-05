@@ -82,16 +82,23 @@ const bufferSourceConstructors = [
 
 const bufferSourceCreators = [];
 for (const constructor of bufferSourceConstructors) {
+    const { name } = constructor;
     bufferSourceCreators.push(
         {
-            typeName: constructor.name,
-            label: `${constructor.name} same realm`,
+            typeName: name,
+            label: `${name} same realm`,
             creator: () => new constructor(new ArrayBuffer(0))
         },
         {
-            typeName: constructor.name,
-            label: `${constructor.name} different realm`,
-            creator: () => vm.runInContext(`new ${constructor.name}(new ArrayBuffer(0))`, differentRealm)
+            typeName: name,
+            label: `${name} different realm`,
+            creator: () => vm.runInContext(`new ${name}(new ArrayBuffer(0))`, differentRealm)
+        },
+        {
+            typeName: name,
+            label: `forged ${name}`,
+            creator: () => Object.create(constructor.prototype, { [Symbol.toStringTag]: { value: name } }),
+            isForged: true
         }
     );
 }
@@ -102,7 +109,7 @@ for (const type of bufferSourceConstructors) {
 
     describe("WebIDL " + typeName + " type", () => {
         for (const innerType of bufferSourceCreators) {
-            const testFunction = innerType.typeName === typeName ? testOk : testNotOk;
+            const testFunction = innerType.typeName === typeName && !innerType.isForged ? testOk : testNotOk;
             testFunction(innerType.label, sut, innerType.creator);
         }
 
@@ -113,8 +120,8 @@ for (const type of bufferSourceConstructors) {
 describe("WebIDL ArrayBufferView type", () => {
     const sut = conversions.ArrayBufferView;
 
-    for (const { label, typeName, creator } of bufferSourceCreators) {
-        const testFunction = typeName !== "ArrayBuffer" ? testOk : testNotOk;
+    for (const { label, typeName, creator, isForged } of bufferSourceCreators) {
+        const testFunction = typeName !== "ArrayBuffer" && !isForged ? testOk : testNotOk;
         testFunction(label, sut, creator);
     }
 
@@ -124,8 +131,9 @@ describe("WebIDL ArrayBufferView type", () => {
 describe("WebIDL BufferSource type", () => {
     const sut = conversions.BufferSource;
 
-    for (const { label, creator } of bufferSourceCreators) {
-        testOk(label, sut, creator);
+    for (const { label, creator, isForged } of bufferSourceCreators) {
+        const testFunction = !isForged ? testOk : testNotOk;
+        testFunction(label, sut, creator);
     }
 
     commonNotOk(sut);
