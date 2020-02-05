@@ -2,6 +2,7 @@
 const assert = require("assert");
 
 const conversions = require("..");
+const assertThrows = require("./assertThrows");
 
 function assertIs(actual, expected, message) {
     if (!Object.is(actual, expected)) {
@@ -53,33 +54,33 @@ function commonTest(sut) {
     });
 
     itBigInt("should throw a TypeError for `0n`", () => {
-        assert.throws(() => sut(BigInt(0)), TypeError);
+        assertThrows(sut, [BigInt(0)], TypeError);
     });
 }
 
 function commonRestricted(sut) {
     it("should throw a TypeError for no argument", () => {
-        assert.throws(() => sut(), TypeError);
+        assertThrows(sut, [], TypeError);
     });
 
     it("should throw a TypeError for `undefined`", () => {
-        assert.throws(() => sut(undefined), TypeError);
+        assertThrows(sut, [undefined], TypeError);
     });
 
     it("should throw a TypeError for `NaN`", () => {
-        assert.throws(() => sut(NaN), TypeError);
+        assertThrows(sut, [NaN], TypeError);
     });
 
     it("should throw a TypeError for `+Infinity`", () => {
-        assert.throws(() => sut(Infinity), TypeError);
+        assertThrows(sut, [Infinity], TypeError);
     });
 
     it("should throw a TypeError for `-Infinity`", () => {
-        assert.throws(() => sut(-Infinity), TypeError);
+        assertThrows(sut, [-Infinity], TypeError);
     });
 
     it("should throw a TypeError for `\" 123,123 \"` (since it becomes `NaN`)", () => {
-        assert.throws(() => sut(" 123,123 "), TypeError);
+        assertThrows(sut, [" 123,123 "], TypeError);
     });
 }
 
@@ -153,11 +154,11 @@ describe("WebIDL float type", () => {
     commonFloat(sut);
 
     it("should throw a TypeError for `2 ** 128`", () => {
-        assert.throws(() => sut(Math.pow(2, 128)), TypeError);
+        assertThrows(sut, [Math.pow(2, 128)], TypeError);
     });
 
     it("should throw a TypeError for `-(2 ** 128)`", () => {
-        assert.throws(() => sut(-Math.pow(2, 128)), TypeError);
+        assertThrows(sut, [-Math.pow(2, 128)], TypeError);
     });
 });
 

@@ -2,6 +2,7 @@
 const assert = require("assert");
 
 const conversions = require("..");
+const assertThrows = require("./assertThrows");
 
 const itBigInt = typeof BigInt === "function" && typeof BigInt(0) === "bigint" ? it : it.skip;
 
@@ -19,42 +20,42 @@ describe("WebIDL object type", () => {
     });
 
     it("should throw a TypeError for `undefined`", () => {
-        assert.throws(() => sut(undefined), TypeError);
+        assertThrows(sut, [undefined], TypeError);
     });
 
     it("should throw a TypeError for `null`", () => {
-        assert.throws(() => sut(null), TypeError);
+        assertThrows(sut, [null], TypeError);
     });
 
     it("should throw a TypeError for `true`", () => {
-        assert.throws(() => sut(true), TypeError);
+        assertThrows(sut, [true], TypeError);
     });
 
     it("should throw a TypeError for `false`", () => {
-        assert.throws(() => sut(false), TypeError);
+        assertThrows(sut, [false], TypeError);
     });
 
     it("should throw a TypeError for `Infinity`", () => {
-        assert.throws(() => sut(Infinity), TypeError);
+        assertThrows(sut, [Infinity], TypeError);
     });
 
     it("should throw a TypeError for `NaN`", () => {
-        assert.throws(() => sut(NaN), TypeError);
+        assertThrows(sut, [NaN], TypeError);
     });
 
     it("should throw a TypeError for `0`", () => {
-        assert.throws(() => sut(0), TypeError);
+        assertThrows(sut, [0], TypeError);
     });
 
     it("should throw a TypeError for `''`", () => {
-        assert.throws(() => sut(""), TypeError);
+        assertThrows(sut, [""], TypeError);
     });
 
     it("should throw a TypeError for `Symbol.iterator`", () => {
-        assert.throws(() => sut(Symbol.iterator), TypeError);
+        assertThrows(sut, [Symbol.iterator], TypeError);
     });
 
     itBigInt("should throw a TypeError for `0n`", () => {
-        assert.throws(() => sut(BigInt(0)), TypeError);
+        assertThrows(sut, [BigInt(0)], TypeError);
     });
 });

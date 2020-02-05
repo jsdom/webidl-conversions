@@ -25,7 +25,24 @@ void doStuff(boolean x, unsigned long y);
 
 This package's main module's default export is an object with a variety of methods, each corresponding to a different Web IDL type. Each method, when invoked on a JavaScript value, will give back the new JavaScript value that results after passing through the Web IDL conversion rules. (See below for more details on what that means.) Alternately, the method could throw an error, if the Web IDL algorithm is specified to do so: for example `conversions["float"](NaN)` [will throw a `TypeError`](http://heycam.github.io/webidl/#es-float).
 
-Each method also accepts a second, optional, parameter for miscellaneous options. For conversion methods that throw errors, a string option `{ context }` may be provided to provide more information in the error message. (For example, `conversions["float"](NaN, { context: "Argument 1 of Interface's operation" })` will throw an error with message `"Argument 1 of Interface's operation is not a finite floating-point value."`) Specific conversions may also accept other options, the details of which can be found below.
+Each method also accepts a second, optional, parameter for miscellaneous options. For conversion methods that throw errors, a string option `{ context }` may be provided to provide more information in the error message. (For example, `conversions["float"](NaN, { context: "Argument 1 of Interface's operation" })` will throw an error with message `"Argument 1 of Interface's operation is not a finite floating-point value."`)
+
+If we are dealing with multiple JavaScript realms (such as those created using Node.js' [vm](https://nodejs.org/api/vm.html) module or the HTML `iframe` element), and exceptions from another realm need to be thrown, one can supply an object option `globals` containing the following properties:
+
+```js
+{
+  globals: {
+    Number,
+    String,
+    TypeError,
+    max: Math.max
+  }
+}
+```
+
+Those specific functions will be used when throwing exceptions.
+
+Specific conversions may also accept other options, the details of which can be found below.
 
 ## Conversions implemented
 

@@ -2,6 +2,7 @@
 const assert = require("assert");
 
 const conversions = require("..");
+const assertThrows = require("./assertThrows");
 
 function commonTest(sut) {
     it("should return `\"undefined\"` for `undefined`", () => {
@@ -40,7 +41,7 @@ function commonTest(sut) {
     });
 
     it("should throw a TypeError for a symbol", () => {
-        assert.throws(() => sut(Symbol("dummy description")), TypeError);
+        assertThrows(sut, [Symbol("dummy description")], TypeError);
     });
 
     it("should prefer toString to valueOf on objects", () => {
@@ -88,23 +89,23 @@ describe("WebIDL ByteString type", () => {
     commonTest(sut);
 
     it("should throw a TypeError for two-byte characters", () => {
-        assert.throws(() => sut("中文"), TypeError);
+        assertThrows(sut, ["中文"], TypeError);
     });
 
     it("should throw a TypeError for valid Unicode surrogates", () => {
-        assert.throws(() => sut("\uD83D\uDE00"), TypeError);
+        assertThrows(sut, ["\uD83D\uDE00"], TypeError);
     });
 
     it("should throw a TypeError for invalid Unicode surrogates", () => {
-        assert.throws(() => sut("\uD83D"), TypeError);
-        assert.throws(() => sut("\uD83Da"), TypeError);
-        assert.throws(() => sut("a\uD83D"), TypeError);
-        assert.throws(() => sut("a\uD83Da"), TypeError);
-        assert.throws(() => sut("\uDE00"), TypeError);
-        assert.throws(() => sut("\uDE00a"), TypeError);
-        assert.throws(() => sut("a\uDE00"), TypeError);
-        assert.throws(() => sut("a\uDE00a"), TypeError);
-        assert.throws(() => sut("\uDE00\uD830"), TypeError);
+        assertThrows(sut, ["\uD83D"], TypeError);
+        assertThrows(sut, ["\uD83Da"], TypeError);
+        assertThrows(sut, ["a\uD83D"], TypeError);
+        assertThrows(sut, ["a\uD83Da"], TypeError);
+        assertThrows(sut, ["\uDE00"], TypeError);
+        assertThrows(sut, ["\uDE00a"], TypeError);
+        assertThrows(sut, ["a\uDE00"], TypeError);
+        assertThrows(sut, ["a\uDE00a"], TypeError);
+        assertThrows(sut, ["\uDE00\uD830"], TypeError);
     });
 });
 
