@@ -5,8 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "mocha test/*.js",
-    "coverage": "nyc mocha test/*.js"
+    "test": "mocha --v8-allow-natives-syntax test/*.js",
+    "coverage": "nyc mocha --v8-allow-natives-syntax test/*.js"
   },
   "repository": "jsdom/webidl-conversions",
   "keywords": [

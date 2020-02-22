@@ -18,6 +18,22 @@ describe("WebIDL object type", () => {
         assert.strictEqual(sut(func), func);
     });
 
+    {
+        const documentAll = (() => {
+            try {
+                // eslint-disable-next-line no-eval
+                return (0, eval)("%GetUndetectable()");
+            } catch (err) {
+                return false;
+            }
+        })();
+
+        const itHTMLDDA = documentAll !== false ? it : it.skip;
+        itHTMLDDA("should return `document.all` for `document.all` (needs --allow-natives-syntax)", () => {
+            assert.strictEqual(sut(documentAll), documentAll);
+        });
+    }
+
     it("should throw a TypeError for `undefined`", () => {
         assert.throws(() => sut(undefined), TypeError);
     });

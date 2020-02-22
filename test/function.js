@@ -14,6 +14,17 @@ const supportsAsyncFunction = (() => {
     }
 })();
 
+const documentAll = (() => {
+    try {
+        // eslint-disable-next-line no-eval
+        const docAll = (0, eval)("%GetUndetectable()");
+        Function.prototype.toString.call(docAll);
+        return docAll;
+    } catch (err) {
+        return false;
+    }
+})();
+
 function test(type) {
     describe("WebIDL " + type + " type", () => {
         const sut = conversions[type];
@@ -44,6 +55,11 @@ function test(type) {
                 assert.strictEqual(sut(func), func);
             });
         }
+
+        const itHTMLDDA = documentAll !== false ? it : it.skip;
+        itHTMLDDA("should return `document.all` for `document.all` (needs --allow-natives-syntax)", () => {
+            assert.strictEqual(sut(documentAll), documentAll);
+        });
 
         it("should throw a TypeError for `undefined`", () => {
             assert.throws(() => sut(undefined), TypeError);
