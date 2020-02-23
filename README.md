@@ -70,9 +70,11 @@ Derived types, such as nullable types, promise types, sequences, records, etc. a
 
 ### A note on the `long long` types
 
-The `long long` and `unsigned long long` Web IDL types can hold values that cannot be stored in JavaScript numbers, so the conversion is imperfect. For example, converting the JavaScript number `18446744073709552000` to a Web IDL `long long` is supposed to produce the Web IDL value `-18446744073709551232`. Since we are representing our Web IDL values in JavaScript, we can't represent `-18446744073709551232`, so we instead the best we could do is `-18446744073709552000` as the output.
+The `long long` and `unsigned long long` Web IDL types can hold values that cannot be stored in JavaScript numbers. Conversions are still accurate as we make use of BigInt in the conversion process, but in the case of `unsigned long long` we simply cannot represent some possible output values in JavaScript. For example, converting the JavaScript number `-1` to a Web IDL `unsigned long long` is supposed to produce the Web IDL value `18446744073709551615`. Since we are representing our Web IDL values in JavaScript, we can't represent `18446744073709551615`, so we instead the best we could do is `18446744073709551616` as the output.
 
-This library actually doesn't even get that far. Producing those results would require doing accurate modular arithmetic on 64-bit intermediate values, but JavaScript does not make this easy. We could pull in a big-integer library as a dependency, but in lieu of that, we for now have decided to just produce inaccurate results if you pass in numbers that are not strictly between `Number.MIN_SAFE_INTEGER` and `Number.MAX_SAFE_INTEGER`.
+To mitigate this, we could return the raw BigInt value from the conversion function, but right now it is not implemented. If your use case requires such precision, [file an issue](https://github.com/jsdom/webidl-conversions/issues/new).
+
+On the other hand, `long long` conversion is always accurate, since the input value can never be more precise than the output value.
 
 ## Background
 
