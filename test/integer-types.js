@@ -2,6 +2,7 @@
 const assert = require("assert");
 
 const conversions = require("..");
+const assertThrows = require("./assertThrows");
 
 function assertIs(actual, expected, message) {
     if (!Object.is(actual, expected)) {
@@ -64,7 +65,7 @@ function commonTest(sut) {
     });
 
     itBigInt("should throw a TypeError for `0n`", () => {
-        assert.throws(() => sut(BigInt(0)), TypeError);
+        assertThrows(sut, [BigInt(0)], TypeError);
     });
 }
 
@@ -82,15 +83,15 @@ function commonTestNonFinite(sut) {
     });
 
     it("should throw for NaN with [EnforceRange]", () => {
-        assert.throws(() => sut(NaN, { enforceRange: true }), TypeError);
+        assertThrows(sut, [NaN, { enforceRange: true }], TypeError);
     });
 
     it("should throw for +Infinity with [EnforceRange]", () => {
-        assert.throws(() => sut(Infinity, { enforceRange: true }), TypeError);
+        assertThrows(sut, [Infinity, { enforceRange: true }], TypeError);
     });
 
     it("should throw for -Infinity with [EnforceRange]", () => {
-        assert.throws(() => sut(-Infinity, { enforceRange: true }), TypeError);
+        assertThrows(sut, [-Infinity, { enforceRange: true }], TypeError);
     });
 }
 
@@ -103,7 +104,7 @@ function generateTests(sut, testCases, options, extraLabel) {
 
         if (expected === TypeError) {
             it("should throw for " + input + extraLabel, () => {
-                assert.throws(() => sut(input, options), TypeError);
+                assertThrows(sut, [input, options], TypeError);
             });
         } else {
             it(`should return ${expected} for ${input}${extraLabel}`, () => {
