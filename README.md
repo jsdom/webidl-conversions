@@ -34,8 +34,7 @@ If we are dealing with multiple JavaScript realms (such as those created using N
   globals: {
     Number,
     String,
-    TypeError,
-    max: Math.max
+    TypeError
   }
 }
 ```

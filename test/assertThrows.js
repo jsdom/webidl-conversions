@@ -6,8 +6,7 @@ const context = vm.createContext();
 const otherGlobals = {
     Number: vm.runInContext("Number", context),
     String: vm.runInContext("String", context),
-    TypeError: vm.runInContext("TypeError", context),
-    max: vm.runInContext("Math.max", context)
+    TypeError: vm.runInContext("TypeError", context)
 };
 
 module.exports = (converter, args, exceptionType) => {
