@@ -2,10 +2,10 @@
   "root": true,
   "env": {
     "node": true,
-    "es6": true
+    "es2020": true
   },
   "parserOptions": {
-    "ecmaVersion": 2018
+    "ecmaVersion": 2020
   },
   "rules": {
     // Possible errors
@@ -255,15 +255,5 @@
     "symbol-description": "error",
     "template-curly-spacing": ["error", "never"],
     "yield-star-spacing": ["error", "after"]
-  },
-  "overrides": [
-    {
-      "files": [
-        "test/**"
-      ],
-      "globals": {
-        "BigInt": "writable"
-      }
-    }
-  ]
+  }
 }

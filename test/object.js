@@ -4,8 +4,6 @@ const assert = require("assert");
 const conversions = require("..");
 const assertThrows = require("./assertThrows");
 
-const itBigInt = typeof BigInt === "function" && typeof BigInt(0) === "bigint" ? it : it.skip;
-
 describe("WebIDL object type", () => {
     const sut = conversions.object;
 
@@ -55,7 +53,7 @@ describe("WebIDL object type", () => {
         assertThrows(sut, [Symbol.iterator], TypeError);
     });
 
-    itBigInt("should throw a TypeError for `0n`", () => {
-        assertThrows(sut, [BigInt(0)], TypeError);
+    it("should throw a TypeError for `0n`", () => {
+        assertThrows(sut, [0n], TypeError);
     });
 });
