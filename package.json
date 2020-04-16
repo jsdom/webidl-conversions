@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "mocha test/*.js",
+    "test": "node --experimental-worker node_modules/mocha/bin/_mocha test/*.js",
     "coverage": "nyc mocha test/*.js"
   },
   "repository": "jsdom/webidl-conversions",
