@@ -62,14 +62,14 @@ function commonNotOk(sut) {
 }
 
 function testOk(name, sut, create) {
-    it("should return input for `" + name + "` object", () => {
+    it(`should return input for ${name}`, () => {
         const obj = create();
         assert.strictEqual(sut(obj), obj);
     });
 }
 
 function testNotOk(name, sut, create) {
-    it("should throw a TypeError for `" + name + "` object", () => {
+    it(`should throw a TypeError for ${name}`, () => {
         assertThrows(sut, [create()], TypeError);
     });
 }
@@ -112,7 +112,7 @@ if (MessageChannel) {
         typeName: "ArrayBuffer",
         isShared: false,
         isDetached: true,
-        label: "ArrayBuffer detached",
+        label: "detached ArrayBuffer",
         creator: () => {
             const value = new ArrayBuffer(0);
             const { port1 } = new MessageChannel();
@@ -177,7 +177,7 @@ for (const constructor of bufferSourceConstructors) {
             isShared: false,
             isDetached: true,
             isForged: false,
-            label: `${name} detached`,
+            label: `detached ${name}`,
             creator: () => {
                 const value = new constructor(new ArrayBuffer(0));
                 const { port1 } = new MessageChannel();
