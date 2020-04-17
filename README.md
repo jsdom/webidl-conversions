@@ -56,11 +56,11 @@ Conversions for all of the basic types from the Web IDL specification are implem
 - [`DOMString`](https://heycam.github.io/webidl/#es-DOMString), which can additionally be provided the boolean option `{ treatNullAsEmptyString }` as a second parameter
 - [`ByteString`](https://heycam.github.io/webidl/#es-ByteString), [`USVString`](https://heycam.github.io/webidl/#es-USVString)
 - [`object`](https://heycam.github.io/webidl/#es-object)
-- [Buffer source types](https://heycam.github.io/webidl/#es-buffer-source-types)
+- [Buffer source types](https://heycam.github.io/webidl/#es-buffer-source-types), which can additionally be provided with the boolean option `{ allowShared }` as a second parameter
 
 Additionally, for convenience, the following derived type definitions are implemented:
 
-- [`ArrayBufferView`](https://heycam.github.io/webidl/#ArrayBufferView)
+- [`ArrayBufferView`](https://heycam.github.io/webidl/#ArrayBufferView), which can additionally be provided with the boolean option `{ allowShared }` as a second parameter
 - [`BufferSource`](https://heycam.github.io/webidl/#BufferSource)
 - [`DOMTimeStamp`](https://heycam.github.io/webidl/#DOMTimeStamp)
 - [`Function`](https://heycam.github.io/webidl/#Function)
@@ -75,6 +75,10 @@ The `long long` and `unsigned long long` Web IDL types can hold values that cann
 To mitigate this, we could return the raw BigInt value from the conversion function, but right now it is not implemented. If your use case requires such precision, [file an issue](https://github.com/jsdom/webidl-conversions/issues/new).
 
 On the other hand, `long long` conversion is always accurate, since the input value can never be more precise than the output value.
+
+### A note on `BufferSource` types
+
+All of the `BufferSource` types will throw when the relevant `ArrayBuffer` has been detached. This technically is not part of the [specified conversion algorithm](https://heycam.github.io/webidl/#es-buffer-source-types), but instead part of the [getting a reference/getting a copy](https://heycam.github.io/webidl/#ref-for-dfn-get-buffer-source-reference%E2%91%A0) algorithms. We've consolidated them here for convenience and ease of implementation, but if there is a need to separate them in the future, please open an issue so we can investigate.
 
 ## Background
 
