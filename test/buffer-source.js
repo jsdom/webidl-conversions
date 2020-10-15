@@ -10,7 +10,7 @@ let MessageChannel;
 try {
     // eslint-disable-next-line global-require
     MessageChannel = require("worker_threads").MessageChannel;
-} catch {
+} catch (_) {
     // eslint-disable-next-line no-console
     console.warn("Skipping tests that require the worker_threads module");
 }

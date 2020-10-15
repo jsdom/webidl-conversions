@@ -128,7 +128,7 @@
     "no-undef": "error",
     "no-undef-init": "error",
     "no-undefined": "off",
-    "no-unused-vars": "error",
+    "no-unused-vars": ["error", { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }],
     "no-use-before-define": ["error", "nofunc"],
 
     // Node.js and CommonJS
