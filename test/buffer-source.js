@@ -3,7 +3,7 @@ const assert = require("assert");
 const vm = require("vm");
 const { MessageChannel } = require("worker_threads");
 
-const assertThrows = require("./assertThrows");
+const assertThrows = require("./helpers/assertThrows");
 const conversions = require("..");
 
 function commonNotOk(sut) {

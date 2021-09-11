@@ -4,7 +4,7 @@
 const assert = require("assert");
 
 const conversions = require("..");
-const assertThrows = require("./assertThrows");
+const assertThrows = require("./helpers/assertThrows");
 
 const supportsAsyncFunction = (() => {
   try {
