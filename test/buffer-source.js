@@ -1,19 +1,10 @@
 "use strict";
 const assert = require("assert");
 const vm = require("vm");
+const { MessageChannel } = require("worker_threads");
 
 const assertThrows = require("./assertThrows");
 const conversions = require("..");
-
-// Not supported in Node v10, so we'll skip the tests for detached ArrayBuffers there.
-let MessageChannel;
-try {
-  // eslint-disable-next-line global-require
-  MessageChannel = require("worker_threads").MessageChannel;
-} catch {
-  // eslint-disable-next-line no-console
-  console.warn("Skipping tests that require the worker_threads module");
-}
 
 function commonNotOk(sut) {
   it("should throw a TypeError for `undefined`", () => {
@@ -104,11 +95,8 @@ const bufferSourceCreators = [
     isDetached: false,
     label: "SharedArrayBuffer same realm",
     creator: () => new SharedArrayBuffer(0)
-  }
-];
-
-if (MessageChannel) {
-  bufferSourceCreators.push({
+  },
+  {
     typeName: "ArrayBuffer",
     isShared: false,
     isDetached: true,
@@ -119,8 +107,8 @@ if (MessageChannel) {
       port1.postMessage(undefined, [value]);
       return value;
     }
-  });
-}
+  }
+];
 
 for (const constructor of bufferSourceConstructors) {
   if (constructor === ArrayBuffer) {
