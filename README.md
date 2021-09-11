@@ -63,8 +63,6 @@ Additionally, for convenience, the following derived type definitions are implem
 - [`ArrayBufferView`](https://heycam.github.io/webidl/#ArrayBufferView), which can additionally be provided with the boolean option `{ allowShared }` as a second parameter
 - [`BufferSource`](https://heycam.github.io/webidl/#BufferSource)
 - [`DOMTimeStamp`](https://heycam.github.io/webidl/#DOMTimeStamp)
-- [`Function`](https://heycam.github.io/webidl/#Function)
-- [`VoidFunction`](https://heycam.github.io/webidl/#VoidFunction) (although it will not censor the return type)
 
 Derived types, such as nullable types, promise types, sequences, records, etc. are not handled by this library. You may wish to investigate the [webidl2js](https://github.com/jsdom/webidl2js) project.
 
