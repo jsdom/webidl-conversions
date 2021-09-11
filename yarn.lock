@@ -208,6 +208,11 @@
     "@babel/helper-validator-identifier" "^7.14.9"
     to-fast-properties "^2.0.0"
 
+"@domenic/eslint-config@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@domenic/eslint-config/-/eslint-config-1.3.0.tgz#32f8766417303369d543d7e7efb78c5dbd7a3bd3"
+  integrity sha512-7xok6dsq+GzYjlM7gXcXpnzi/ty/iHE0MksT0PSbySYMeRjVqwWdUcB8zvFIRE6DnKDCmsvHVwOzGiqwcgrelA==
+
 "@eslint/eslintrc@^0.4.3":
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-0.4.3.tgz#9e42981ef035beb3dd49add17acb96e8ff6f394c"
