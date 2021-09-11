@@ -194,10 +194,14 @@ for (const type of bufferSourceConstructors) {
 
   describe(`WebIDL ${typeName} type`, () => {
     for (const innerType of bufferSourceCreators) {
-      const testFunction = innerType.typeName === typeName && !innerType.isShared && !innerType.isDetached &&
-                !innerType.isForged ?
-testOk :
-testNotOk;
+      const testFunction =
+        innerType.typeName === typeName &&
+        !innerType.isShared &&
+        !innerType.isDetached &&
+        !innerType.isForged ?
+          testOk :
+          testNotOk;
+
       testFunction(innerType.label, sut, innerType.creator);
     }
 
@@ -220,10 +224,15 @@ describe("WebIDL ArrayBufferView type", () => {
   const sut = conversions.ArrayBufferView;
 
   for (const { label, typeName, isShared, isDetached, isForged, creator } of bufferSourceCreators) {
-    const testFunction = typeName !== "ArrayBuffer" && typeName !== "SharedArrayBuffer" &&
-            !isShared && !isDetached && !isForged ?
-testOk :
-testNotOk;
+    const testFunction =
+      typeName !== "ArrayBuffer" &&
+      typeName !== "SharedArrayBuffer" &&
+      !isShared &&
+      !isDetached &&
+      !isForged ?
+        testOk :
+        testNotOk;
+
     testFunction(label, sut, creator);
   }
 
@@ -233,10 +242,14 @@ testNotOk;
     const allowSharedSUT = (v, opts) => conversions.ArrayBufferView(v, { ...opts, allowShared: true });
 
     for (const { label, creator, typeName, isDetached, isForged } of bufferSourceCreators) {
-      const testFunction = typeName !== "ArrayBuffer" && typeName !== "SharedArrayBuffer" && !isDetached &&
-                !isForged ?
-testOk :
-testNotOk;
+      const testFunction =
+        typeName !== "ArrayBuffer" &&
+        typeName !== "SharedArrayBuffer" &&
+        !isDetached &&
+        !isForged ?
+          testOk :
+          testNotOk;
+
       testFunction(label, allowSharedSUT, creator);
     }
 
