@@ -2,7 +2,7 @@
 const assert = require("assert");
 
 const conversions = require("..");
-const assertThrows = require("./assertThrows");
+const assertThrows = require("./helpers/assertThrows");
 
 function commonTest(sut) {
   it("should return `\"undefined\"` for `undefined`", () => {

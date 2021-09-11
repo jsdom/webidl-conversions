@@ -2,7 +2,7 @@
 const assert = require("assert");
 
 const conversions = require("..");
-const assertThrows = require("./assertThrows");
+const assertThrows = require("./helpers/assertThrows");
 
 // For extraordinarily large (in magnitude) numbers, we can't rely on toString() to give the most accurate output. See
 // the note at https://tc39.es/ecma262/#sec-number.prototype.tofixed:
