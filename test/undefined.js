@@ -3,8 +3,8 @@ const assert = require("assert");
 
 const conversions = require("..");
 
-describe("WebIDL void type", () => {
-  const sut = conversions.void;
+describe("WebIDL undefined type", () => {
+  const sut = conversions.undefined;
 
   it("should return `undefined` for everything", () => {
     assert.strictEqual(sut(undefined), undefined);
