@@ -90,13 +90,6 @@ const bufferSourceCreators = [
     creator: () => new ArrayBuffer(0)
   },
   {
-    typeName: "SharedArrayBuffer",
-    isShared: true,
-    isDetached: false,
-    label: "SharedArrayBuffer same realm",
-    creator: () => new SharedArrayBuffer(0)
-  },
-  {
     typeName: "ArrayBuffer",
     isShared: false,
     isDetached: true,
@@ -109,6 +102,16 @@ const bufferSourceCreators = [
     }
   }
 ];
+
+if (typeof SharedArrayBuffer === "function") {
+  bufferSourceCreators.push({
+    typeName: "SharedArrayBuffer",
+    isShared: true,
+    isDetached: false,
+    label: "SharedArrayBuffer same realm",
+    creator: () => new SharedArrayBuffer(0)
+  });
+}
 
 for (const constructor of bufferSourceConstructors) {
   if (constructor === ArrayBuffer) {
@@ -135,32 +138,13 @@ for (const constructor of bufferSourceConstructors) {
     },
     {
       typeName: name,
-      isShared: true,
-      isDetached: false,
-      isForged: false,
-      label: `${name} SharedArrayBuffer same realm`,
-      creator: () => new constructor(new SharedArrayBuffer(0))
-    },
-    {
-      typeName: name,
-      isShared: true,
-      isDetached: false,
-      isForged: false,
-      label: `${name} SharedArrayBuffer different realm`,
-      creator: () => vm.runInContext(`new ${constructor.name}(new SharedArrayBuffer(0))`, differentRealm)
-    },
-    {
-      typeName: name,
       isShared: false,
       isDetached: false,
       isForged: true,
       label: `forged ${name}`,
       creator: () => Object.create(constructor.prototype, { [Symbol.toStringTag]: { value: name } })
-    }
-  );
-
-  if (MessageChannel) {
-    bufferSourceCreators.push({
+    },
+    {
       typeName: name,
       isShared: false,
       isDetached: true,
@@ -172,7 +156,28 @@ for (const constructor of bufferSourceConstructors) {
         port1.postMessage(undefined, [value.buffer]);
         return value;
       }
-    });
+    }
+  );
+
+  if (typeof SharedArrayBuffer === "function") {
+    bufferSourceCreators.push(
+      {
+        typeName: name,
+        isShared: true,
+        isDetached: false,
+        isForged: false,
+        label: `${name} SharedArrayBuffer same realm`,
+        creator: () => new constructor(new SharedArrayBuffer(0))
+      },
+      {
+        typeName: name,
+        isShared: true,
+        isDetached: false,
+        isForged: false,
+        label: `${name} SharedArrayBuffer different realm`,
+        creator: () => vm.runInContext(`new ${constructor.name}(new SharedArrayBuffer(0))`, differentRealm)
+      }
+    );
   }
 }
 

@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "mocha test/*.js",
+    "no-sab-test": "mocha --require test/helpers/delete-sab.js test/*.js",
     "coverage": "nyc mocha test/*.js"
   },
   "repository": "jsdom/webidl-conversions",
