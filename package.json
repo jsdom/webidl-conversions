@@ -6,8 +6,11 @@
   "scripts": {
     "lint": "eslint .",
     "test": "mocha test/*.js",
-    "no-sab-test": "mocha --require test/helpers/delete-sab.js test/*.js",
+    "test-no-sab": "mocha --parallel --jobs 2 --require test/helpers/delete-sab.js test/*.js",
     "coverage": "nyc mocha test/*.js"
+  },
+  "_scripts_comments": {
+    "test-no-sab": "Node.js internals are broken by deleting SharedArrayBuffer if you run tests on the main thread. Using Mocha's parallel mode avoids this."
   },
   "repository": "jsdom/webidl-conversions",
   "keywords": [
