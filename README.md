@@ -18,7 +18,7 @@ function doStuff(x, y) {
 and your function `doStuff` will behave the same as a Web IDL operation declared as
 
 ```webidl
-void doStuff(boolean x, unsigned long y);
+undefined doStuff(boolean x, unsigned long y);
 ```
 
 ## API
@@ -48,7 +48,7 @@ Specific conversions may also accept other options, the details of which can be 
 Conversions for all of the basic types from the Web IDL specification are implemented:
 
 - [`any`](https://heycam.github.io/webidl/#es-any)
-- [`void`](https://heycam.github.io/webidl/#es-void)
+- [`undefined`](https://heycam.github.io/webidl/#es-undefined)
 - [`boolean`](https://heycam.github.io/webidl/#es-boolean)
 - [Integer types](https://heycam.github.io/webidl/#es-integer-types), which can additionally be provided the boolean options `{ clamp, enforceRange }` as a second parameter
 - [`float`](https://heycam.github.io/webidl/#es-float), [`unrestricted float`](https://heycam.github.io/webidl/#es-unrestricted-float)
