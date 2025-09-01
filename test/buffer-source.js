@@ -211,7 +211,11 @@ for (const type of bufferSourceConstructors) {
       const allowSharedSUT = (v, opts) => conversions[typeName](v, { ...opts, allowShared: true });
 
       for (const { label, creator, typeName: innerTypeName, isDetached, isForged } of bufferSourceCreators) {
-        const testFunction = innerTypeName === typeName && !isDetached && !isForged ? testOk : testNotOk;
+        const testFunction = (
+            innerTypeName === typeName || (innerTypeName === "SharedArrayBuffer" && typeName === "ArrayBuffer")
+          ) && !isDetached && !isForged ?
+            testOk :
+            testNotOk;
         testFunction(label, allowSharedSUT, creator);
       }
 
