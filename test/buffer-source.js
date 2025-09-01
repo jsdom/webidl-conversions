@@ -86,6 +86,7 @@ const bufferSourceCreators = [
   {
     typeName: "ArrayBuffer",
     isShared: false,
+    isResizable: false,
     isDetached: false,
     label: "ArrayBuffer same realm",
     creator: () => new ArrayBuffer(0)
@@ -93,6 +94,15 @@ const bufferSourceCreators = [
   {
     typeName: "ArrayBuffer",
     isShared: false,
+    isResizable: true,
+    isDetached: false,
+    label: "resizable ArrayBuffer same realm",
+    creator: () => new ArrayBuffer(0, { maxByteLength: 1 })
+  },
+  {
+    typeName: "ArrayBuffer",
+    isShared: false,
+    isResizable: false,
     isDetached: true,
     label: "detached ArrayBuffer",
     creator: () => {
@@ -105,6 +115,7 @@ const bufferSourceCreators = [
   {
     typeName: "SharedArrayBuffer",
     isShared: true,
+    isResizable: false,
     isDetached: false,
     label: "SharedArrayBuffer same realm",
     creator: () => new SharedArrayBuffer(0)
@@ -112,9 +123,26 @@ const bufferSourceCreators = [
   {
     typeName: "SharedArrayBuffer",
     isShared: true,
+    isResizable: true,
+    isDetached: false,
+    label: "growable SharedArrayBuffer same realm",
+    creator: () => new SharedArrayBuffer(0, { maxByteLength: 1 })
+  },
+  {
+    typeName: "SharedArrayBuffer",
+    isShared: true,
+    isResizable: false,
     isDetached: false,
     label: "SharedArrayBuffer different realm",
     creator: () => vm.runInContext(`new SharedArrayBuffer(0)`, differentRealm)
+  },
+  {
+    typeName: "SharedArrayBuffer",
+    isShared: true,
+    isResizable: true,
+    isDetached: false,
+    label: "growable SharedArrayBuffer different realm",
+    creator: () => vm.runInContext(`new SharedArrayBuffer(0, { maxByteLength: 1 })`, differentRealm)
   }
 ];
 
@@ -128,6 +156,7 @@ for (const constructor of bufferSourceConstructors) {
     {
       typeName: name,
       isShared: false,
+      isResizable: false,
       isDetached: false,
       isForged: false,
       label: `${name} same realm`,
@@ -136,6 +165,7 @@ for (const constructor of bufferSourceConstructors) {
     {
       typeName: name,
       isShared: false,
+      isResizable: false,
       isDetached: false,
       isForged: false,
       label: `${name} different realm`,
@@ -144,6 +174,28 @@ for (const constructor of bufferSourceConstructors) {
     {
       typeName: name,
       isShared: false,
+      isResizable: true,
+      isDetached: false,
+      isForged: false,
+      label: `resizable ${name} same realm`,
+      creator: () => new constructor(new ArrayBuffer(0, { maxByteLength: 1 }))
+    },
+    {
+      typeName: name,
+      isShared: false,
+      isResizable: true,
+      isDetached: false,
+      isForged: false,
+      label: `resizable ${name} different realm`,
+      creator: () => vm.runInContext(
+        `new ${constructor.name}(new ArrayBuffer(0, { maxByteLength: 1 }))`,
+        differentRealm
+      )
+    },
+    {
+      typeName: name,
+      isShared: false,
+      isResizable: false,
       isDetached: false,
       isForged: true,
       label: `forged ${name}`,
@@ -152,6 +204,7 @@ for (const constructor of bufferSourceConstructors) {
     {
       typeName: name,
       isShared: false,
+      isResizable: false,
       isDetached: true,
       isForged: false,
       label: `detached ${name}`,
@@ -165,6 +218,7 @@ for (const constructor of bufferSourceConstructors) {
     {
       typeName: name,
       isShared: true,
+      isResizable: false,
       isDetached: false,
       isForged: false,
       label: `${name} SharedArrayBuffer same realm`,
@@ -173,10 +227,32 @@ for (const constructor of bufferSourceConstructors) {
     {
       typeName: name,
       isShared: true,
+      isResizable: false,
       isDetached: false,
       isForged: false,
       label: `${name} SharedArrayBuffer different realm`,
       creator: () => vm.runInContext(`new ${constructor.name}(new SharedArrayBuffer(0))`, differentRealm)
+    },
+    {
+      typeName: name,
+      isShared: true,
+      isResizable: true,
+      isDetached: false,
+      isForged: false,
+      label: `${name} growable SharedArrayBuffer same realm`,
+      creator: () => new constructor(new SharedArrayBuffer(0, { maxByteLength: 1 }))
+    },
+    {
+      typeName: name,
+      isShared: true,
+      isResizable: true,
+      isDetached: false,
+      isForged: false,
+      label: `${name} growable SharedArrayBuffer different realm`,
+      creator: () => vm.runInContext(
+        `new ${constructor.name}(new SharedArrayBuffer(0, { maxByteLength: 1 }))`,
+        differentRealm
+      )
     }
   );
 }
@@ -190,6 +266,7 @@ for (const type of bufferSourceConstructors) {
       const testFunction =
         innerType.typeName === typeName &&
         !innerType.isShared &&
+        !innerType.isResizable &&
         !innerType.isDetached &&
         !innerType.isForged ?
           testOk :
@@ -203,12 +280,37 @@ for (const type of bufferSourceConstructors) {
     describe("with [AllowShared]", () => {
       const allowSharedSUT = (v, opts) => conversions[typeName](v, { ...opts, allowShared: true });
 
-      for (const { label, creator, typeName: innerTypeName, isDetached, isForged } of bufferSourceCreators) {
-        const testFunction = innerTypeName === typeName && !isDetached && !isForged ? testOk : testNotOk;
+      for (const {
+        label, creator, typeName: innerTypeName, isResizable, isDetached, isForged
+      } of bufferSourceCreators) {
+        const testFunction = innerTypeName === typeName &&
+          !isResizable &&
+          !isDetached &&
+          !isForged ?
+            testOk :
+            testNotOk;
         testFunction(label, allowSharedSUT, creator);
       }
 
       commonNotOk(allowSharedSUT);
+    });
+
+    describe("with [AllowResizable]", () => {
+      const allowResizableSUT = (v, opts) => conversions[typeName](v, { ...opts, allowResizable: true });
+
+      for (const {
+        label, creator, typeName: innerTypeName, isShared, isDetached, isForged
+      } of bufferSourceCreators) {
+        const testFunction = innerTypeName === typeName &&
+          !isShared &&
+          !isDetached &&
+          !isForged ?
+            testOk :
+            testNotOk;
+        testFunction(label, allowResizableSUT, creator);
+      }
+
+      commonNotOk(allowResizableSUT);
     });
   });
 }
@@ -220,6 +322,7 @@ describe(`WebIDL SharedArrayBuffer type`, () => {
     const testFunction =
       innerType.typeName === "SharedArrayBuffer" &&
       innerType.isShared &&
+      !innerType.isResizable &&
       !innerType.isDetached &&
       !innerType.isForged ?
         testOk :
@@ -229,16 +332,32 @@ describe(`WebIDL SharedArrayBuffer type`, () => {
   }
 
   commonNotOk(sut);
+
+  describe("with [AllowResizable]", () => {
+    const allowResizableSUT = (v, opts) => sut(v, { ...opts, allowResizable: true });
+
+    for (const { label, creator, typeName: innerTypeName, isDetached, isForged } of bufferSourceCreators) {
+      const testFunction = innerTypeName === "SharedArrayBuffer" &&
+        !isDetached &&
+        !isForged ?
+          testOk :
+          testNotOk;
+      testFunction(label, allowResizableSUT, creator);
+    }
+
+    commonNotOk(allowResizableSUT);
+  });
 });
 
 describe("WebIDL ArrayBufferView type", () => {
   const sut = conversions.ArrayBufferView;
 
-  for (const { label, typeName, isShared, isDetached, isForged, creator } of bufferSourceCreators) {
+  for (const { label, typeName, isShared, isResizable, isDetached, isForged, creator } of bufferSourceCreators) {
     const testFunction =
       typeName !== "ArrayBuffer" &&
       typeName !== "SharedArrayBuffer" &&
       !isShared &&
+      !isResizable &&
       !isDetached &&
       !isForged ?
         testOk :
@@ -252,10 +371,11 @@ describe("WebIDL ArrayBufferView type", () => {
   describe("with [AllowShared]", () => {
     const allowSharedSUT = (v, opts) => conversions.ArrayBufferView(v, { ...opts, allowShared: true });
 
-    for (const { label, creator, typeName, isDetached, isForged } of bufferSourceCreators) {
+    for (const { label, creator, typeName, isResizable, isDetached, isForged } of bufferSourceCreators) {
       const testFunction =
         typeName !== "ArrayBuffer" &&
         typeName !== "SharedArrayBuffer" &&
+        !isResizable &&
         !isDetached &&
         !isForged ?
           testOk :
@@ -266,13 +386,32 @@ describe("WebIDL ArrayBufferView type", () => {
 
     commonNotOk(allowSharedSUT);
   });
+
+  describe("with [AllowResizable]", () => {
+    const allowResizableSUT = (v, opts) => conversions.ArrayBufferView(v, { ...opts, allowResizable: true });
+
+    for (const { label, creator, typeName, isShared, isDetached, isForged } of bufferSourceCreators) {
+      const testFunction =
+        typeName !== "ArrayBuffer" &&
+        typeName !== "SharedArrayBuffer" &&
+        !isShared &&
+        !isDetached &&
+        !isForged ?
+          testOk :
+          testNotOk;
+
+      testFunction(label, allowResizableSUT, creator);
+    }
+
+    commonNotOk(allowResizableSUT);
+  });
 });
 
 describe("WebIDL BufferSource type", () => {
   const sut = conversions.BufferSource;
 
-  for (const { label, creator, isShared, isDetached, isForged } of bufferSourceCreators) {
-    const testFunction = !isShared && !isDetached && !isForged ? testOk : testNotOk;
+  for (const { label, creator, isShared, isResizable, isDetached, isForged } of bufferSourceCreators) {
+    const testFunction = !isShared && !isResizable && !isDetached && !isForged ? testOk : testNotOk;
     testFunction(label, sut, creator);
   }
 
@@ -281,11 +420,22 @@ describe("WebIDL BufferSource type", () => {
   describe("with [AllowShared]", () => {
     const allowSharedSUT = (v, opts) => conversions.BufferSource(v, { ...opts, allowShared: true });
 
-    for (const { label, creator, isDetached, isForged } of bufferSourceCreators) {
-      const testFunction = !isDetached && !isForged ? testOk : testNotOk;
+    for (const { label, creator, isResizable, isDetached, isForged } of bufferSourceCreators) {
+      const testFunction = !isResizable && !isDetached && !isForged ? testOk : testNotOk;
       testFunction(label, allowSharedSUT, creator);
     }
 
     commonNotOk(allowSharedSUT);
+  });
+
+  describe("with [AllowResizable]", () => {
+    const allowResizableSUT = (v, opts) => conversions.BufferSource(v, { ...opts, allowResizable: true });
+
+    for (const { label, creator, isShared, isDetached, isForged } of bufferSourceCreators) {
+      const testFunction = !isShared && !isDetached && !isForged ? testOk : testNotOk;
+      testFunction(label, allowResizableSUT, creator);
+    }
+
+    commonNotOk(allowResizableSUT);
   });
 });
