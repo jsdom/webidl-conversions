@@ -220,6 +220,27 @@ for (const type of bufferSourceConstructors) {
   });
 }
 
+if (typeof SharedArrayBuffer === "function") {
+  const typeName = "SharedArrayBuffer";
+  const sut = conversions[typeName];
+
+  describe(`WebIDL SharedArrayBuffer type`, () => {
+    for (const innerType of bufferSourceCreators) {
+      const testFunction =
+        innerType.typeName === typeName &&
+        innerType.isShared &&
+        !innerType.isDetached &&
+        !innerType.isForged ?
+          testOk :
+          testNotOk;
+
+      testFunction(innerType.label, sut, innerType.creator);
+    }
+
+    commonNotOk(sut);
+  });
+}
+
 describe("WebIDL ArrayBufferView type", () => {
   const sut = conversions.ArrayBufferView;
 
