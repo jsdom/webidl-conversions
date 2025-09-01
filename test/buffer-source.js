@@ -111,6 +111,13 @@ if (typeof SharedArrayBuffer === "function") {
     label: "SharedArrayBuffer same realm",
     creator: () => new SharedArrayBuffer(0)
   });
+  bufferSourceCreators.push({
+    typeName: "SharedArrayBuffer",
+    isShared: true,
+    isDetached: false,
+    label: "SharedArrayBuffer different realm",
+    creator: () => vm.runInContext(`new SharedArrayBuffer(0)`, differentRealm)
+  });
 }
 
 for (const constructor of bufferSourceConstructors) {
