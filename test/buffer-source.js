@@ -312,6 +312,23 @@ for (const type of bufferSourceConstructors) {
 
       commonNotOk(allowResizableSUT);
     });
+
+    describe("with [AllowShared, AllowResizable]", () => {
+      const allowSharedAndResizableSUT = (v, opts) => {
+        return conversions[typeName](v, { ...opts, allowShared: true, allowResizable: true });
+      };
+
+      for (const { label, creator, typeName: innerTypeName, isDetached, isForged } of bufferSourceCreators) {
+        const testFunction = innerTypeName === typeName &&
+        !isDetached &&
+        !isForged ?
+          testOk :
+          testNotOk;
+        testFunction(label, allowSharedAndResizableSUT, creator);
+      }
+
+      commonNotOk(allowSharedAndResizableSUT);
+    });
   });
 }
 
@@ -405,6 +422,26 @@ describe("WebIDL ArrayBufferView type", () => {
 
     commonNotOk(allowResizableSUT);
   });
+
+  describe("with [AllowShared, AllowResizable]", () => {
+    const allowResizableSUT = (v, opts) => {
+      return conversions.ArrayBufferView(v, { ...opts, allowShared: true, allowResizable: true });
+    };
+
+    for (const { label, creator, typeName, isDetached, isForged } of bufferSourceCreators) {
+      const testFunction =
+        typeName !== "ArrayBuffer" &&
+        typeName !== "SharedArrayBuffer" &&
+        !isDetached &&
+        !isForged ?
+          testOk :
+          testNotOk;
+
+      testFunction(label, allowResizableSUT, creator);
+    }
+
+    commonNotOk(allowResizableSUT);
+  });
 });
 
 describe("WebIDL BufferSource type", () => {
@@ -433,6 +470,19 @@ describe("WebIDL BufferSource type", () => {
 
     for (const { label, creator, isShared, isDetached, isForged } of bufferSourceCreators) {
       const testFunction = !isShared && !isDetached && !isForged ? testOk : testNotOk;
+      testFunction(label, allowResizableSUT, creator);
+    }
+
+    commonNotOk(allowResizableSUT);
+  });
+
+  describe("with [AllowShared, AllowResizable]", () => {
+    const allowResizableSUT = (v, opts) => {
+      return conversions.BufferSource(v, { ...opts, allowShared: true, allowResizable: true });
+    };
+
+    for (const { label, creator, isDetached, isForged } of bufferSourceCreators) {
+      const testFunction = !isDetached && !isForged ? testOk : testNotOk;
       testFunction(label, allowResizableSUT, creator);
     }
 
