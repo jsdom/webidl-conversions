@@ -100,25 +100,22 @@ const bufferSourceCreators = [
       port1.postMessage(undefined, [value]);
       return value;
     }
-  }
-];
-
-if (typeof SharedArrayBuffer === "function") {
-  bufferSourceCreators.push({
+  },
+  {
     typeName: "SharedArrayBuffer",
     isShared: true,
     isDetached: false,
     label: "SharedArrayBuffer same realm",
     creator: () => new SharedArrayBuffer(0)
-  });
-  bufferSourceCreators.push({
+  },
+  {
     typeName: "SharedArrayBuffer",
     isShared: true,
     isDetached: false,
     label: "SharedArrayBuffer different realm",
     creator: () => vm.runInContext(`new SharedArrayBuffer(0)`, differentRealm)
-  });
-}
+  }
+];
 
 for (const constructor of bufferSourceConstructors) {
   if (constructor === ArrayBuffer) {
@@ -163,29 +160,24 @@ for (const constructor of bufferSourceConstructors) {
         port1.postMessage(undefined, [value.buffer]);
         return value;
       }
+    },
+    {
+      typeName: name,
+      isShared: true,
+      isDetached: false,
+      isForged: false,
+      label: `${name} SharedArrayBuffer same realm`,
+      creator: () => new constructor(new SharedArrayBuffer(0))
+    },
+    {
+      typeName: name,
+      isShared: true,
+      isDetached: false,
+      isForged: false,
+      label: `${name} SharedArrayBuffer different realm`,
+      creator: () => vm.runInContext(`new ${constructor.name}(new SharedArrayBuffer(0))`, differentRealm)
     }
   );
-
-  if (typeof SharedArrayBuffer === "function") {
-    bufferSourceCreators.push(
-      {
-        typeName: name,
-        isShared: true,
-        isDetached: false,
-        isForged: false,
-        label: `${name} SharedArrayBuffer same realm`,
-        creator: () => new constructor(new SharedArrayBuffer(0))
-      },
-      {
-        typeName: name,
-        isShared: true,
-        isDetached: false,
-        isForged: false,
-        label: `${name} SharedArrayBuffer different realm`,
-        creator: () => vm.runInContext(`new ${constructor.name}(new SharedArrayBuffer(0))`, differentRealm)
-      }
-    );
-  }
 }
 
 for (const type of bufferSourceConstructors) {
@@ -220,26 +212,23 @@ for (const type of bufferSourceConstructors) {
   });
 }
 
-if (typeof SharedArrayBuffer === "function") {
-  const typeName = "SharedArrayBuffer";
-  const sut = conversions[typeName];
+describe(`WebIDL SharedArrayBuffer type`, () => {
+  const sut = conversions.SharedArrayBuffer;
 
-  describe(`WebIDL SharedArrayBuffer type`, () => {
-    for (const innerType of bufferSourceCreators) {
-      const testFunction =
-        innerType.typeName === typeName &&
-        innerType.isShared &&
-        !innerType.isDetached &&
-        !innerType.isForged ?
-          testOk :
-          testNotOk;
+  for (const innerType of bufferSourceCreators) {
+    const testFunction =
+      innerType.typeName === "SharedArrayBuffer" &&
+      innerType.isShared &&
+      !innerType.isDetached &&
+      !innerType.isForged ?
+        testOk :
+        testNotOk;
 
-      testFunction(innerType.label, sut, innerType.creator);
-    }
+    testFunction(innerType.label, sut, innerType.creator);
+  }
 
-    commonNotOk(sut);
-  });
-}
+  commonNotOk(sut);
+});
 
 describe("WebIDL ArrayBufferView type", () => {
   const sut = conversions.ArrayBufferView;

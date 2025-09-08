@@ -25,4 +25,3 @@ jobs:
     - run: yarn --frozen-lockfile
     - run: yarn lint
     - run: yarn test
-    - run: yarn test-no-sab
