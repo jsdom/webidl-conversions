@@ -1,9 +1,0 @@
-{
-  "env": {
-    "mocha": true
-  },
-  "rules": {
-    "no-empty-function": "off",
-    "func-style": "off"
-  }
-}
