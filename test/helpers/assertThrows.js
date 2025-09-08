@@ -1,6 +1,6 @@
 "use strict";
-const assert = require("assert");
-const vm = require("vm");
+const assert = require("node:assert/strict");
+const vm = require("node:vm");
 
 const context = vm.createContext();
 const otherGlobals = {

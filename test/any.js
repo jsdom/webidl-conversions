@@ -1,5 +1,6 @@
 "use strict";
-const assert = require("assert");
+const { describe, it } = require("node:test");
+const assert = require("node:assert/strict");
 
 const conversions = require("..");
 
@@ -7,64 +8,64 @@ describe("WebIDL any type", () => {
   const sut = conversions.any;
 
   it("should return `undefined` for `undefined`", () => {
-    assert.strictEqual(sut(undefined), undefined);
+    assert.equal(sut(undefined), undefined);
   });
 
   it("should return `null` for `null`", () => {
-    assert.strictEqual(sut(null), null);
+    assert.equal(sut(null), null);
   });
 
   it("should return `true` for `true`", () => {
-    assert.strictEqual(sut(true), true);
+    assert.equal(sut(true), true);
   });
 
   it("should return `false` for `false`", () => {
-    assert.strictEqual(sut(false), false);
+    assert.equal(sut(false), false);
   });
 
   it("should return `Infinity` for `Infinity`", () => {
-    assert.strictEqual(sut(Infinity), Infinity);
+    assert.equal(sut(Infinity), Infinity);
   });
 
   it("should return `-Infinity` for `-Infinity`", () => {
-    assert.strictEqual(sut(-Infinity), -Infinity);
+    assert.equal(sut(-Infinity), -Infinity);
   });
 
   it("should return `NaN` for `NaN`", () => {
-    assert(isNaN(sut(NaN)));
+    assert.equal(sut(NaN), NaN);
   });
 
   it("should return `0` for `0`", () => {
-    assert.strictEqual(sut(0), 0);
+    assert.equal(sut(0), 0);
   });
 
   it("should return `-0` for `-0`", () => {
-    assert(Object.is(sut(-0), -0));
+    assert.equal(sut(-0), -0);
   });
 
   it("should return `1` for `1`", () => {
-    assert.strictEqual(sut(1), 1);
+    assert.equal(sut(1), 1);
   });
 
   it("should return `-1` for `-1`", () => {
-    assert.strictEqual(sut(-1), -1);
+    assert.equal(sut(-1), -1);
   });
 
   it("should return `''` for `''`", () => {
-    assert.strictEqual(sut(""), "");
+    assert.equal(sut(""), "");
   });
 
   it("should return `'a'` for `'a'`", () => {
-    assert.strictEqual(sut("a"), "a");
+    assert.equal(sut("a"), "a");
   });
 
   it("should return `{}` for `{}`", () => {
     const obj = {};
-    assert.strictEqual(sut(obj), obj);
+    assert.equal(sut(obj), obj);
   });
 
   it("should return `() => {}` for `() => {}`", () => {
     const func = () => {};
-    assert.strictEqual(sut(func), func);
+    assert.equal(sut(func), func);
   });
 });

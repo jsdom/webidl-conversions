@@ -1,6 +1,7 @@
 "use strict";
 /* eslint-disable no-new-wrappers */
-const assert = require("assert");
+const { describe, it } = require("node:test");
+const assert = require("node:assert/strict");
 
 const conversions = require("..");
 
@@ -8,42 +9,42 @@ describe("WebIDL boolean type", () => {
   const sut = conversions.boolean;
 
   it("should return `false` for `undefined`", () => {
-    assert.strictEqual(sut(undefined), false);
+    assert.equal(sut(undefined), false);
   });
 
   it("should return `false` for `null`", () => {
-    assert.strictEqual(sut(null), false);
+    assert.equal(sut(null), false);
   });
 
   it("should return the input for a boolean", () => {
-    assert.strictEqual(sut(true), true);
-    assert.strictEqual(sut(false), false);
+    assert.equal(sut(true), true);
+    assert.equal(sut(false), false);
   });
 
   it("should return `false` for `+0`, `-0`, and `NaN`, but `true` other numbers", () => {
-    assert.strictEqual(sut(+0), false);
-    assert.strictEqual(sut(-0), false);
-    assert.strictEqual(sut(NaN), false);
-    assert.strictEqual(sut(1), true);
-    assert.strictEqual(sut(-1), true);
-    assert.strictEqual(sut(-Infinity), true);
+    assert.equal(sut(+0), false);
+    assert.equal(sut(-0), false);
+    assert.equal(sut(NaN), false);
+    assert.equal(sut(1), true);
+    assert.equal(sut(-1), true);
+    assert.equal(sut(-Infinity), true);
   });
 
   it("should return `false` for empty strings, but `true` for other strings", () => {
-    assert.strictEqual(sut(""), false);
-    assert.strictEqual(sut(" "), true);
-    assert.strictEqual(sut("false"), true);
+    assert.equal(sut(""), false);
+    assert.equal(sut(" "), true);
+    assert.equal(sut("false"), true);
   });
 
   it("should return `true` for symbols", () => {
-    assert.strictEqual(sut(Symbol("dummy description")), true);
+    assert.equal(sut(Symbol("dummy description")), true);
   });
 
   it("should return `true` for objects", () => {
-    assert.strictEqual(sut({}), true);
-    assert.strictEqual(sut(Object.create(null)), true);
-    assert.strictEqual(sut(() => { }), true);
-    assert.strictEqual(sut(new Boolean(false)), true);
-    assert.strictEqual(sut(new Number(0)), true);
+    assert.equal(sut({}), true);
+    assert.equal(sut(Object.create(null)), true);
+    assert.equal(sut(() => { }), true);
+    assert.equal(sut(new Boolean(false)), true);
+    assert.equal(sut(new Number(0)), true);
   });
 });
