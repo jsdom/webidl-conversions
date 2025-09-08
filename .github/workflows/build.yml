@@ -22,6 +22,6 @@ jobs:
     - uses: actions/setup-node@v5
       with:
         node-version: ${{ matrix.node-version }}
-    - run: yarn --frozen-lockfile
-    - run: yarn lint
-    - run: yarn test
+    - run: npm ci
+    - run: npm run lint
+    - run: npm test
