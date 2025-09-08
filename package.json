@@ -8,7 +8,10 @@
     "test": "node --test",
     "coverage": "c8 node --test --experimental-test-coverage test/*.js"
   },
-  "repository": "jsdom/webidl-conversions",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsdom/webidl-conversions.git"
+  },
   "keywords": [
     "webidl",
     "web",
