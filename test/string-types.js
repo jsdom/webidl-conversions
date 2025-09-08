@@ -1,43 +1,44 @@
 "use strict";
-const assert = require("assert");
+const { describe, it } = require("node:test");
+const assert = require("node:assert/strict");
 
 const conversions = require("..");
 const assertThrows = require("./helpers/assertThrows");
 
 function commonTest(sut) {
   it("should return `\"undefined\"` for `undefined`", () => {
-    assert.strictEqual(sut(undefined), "undefined");
+    assert.equal(sut(undefined), "undefined");
   });
 
   it("should return `\"null\"` for `null`", () => {
-    assert.strictEqual(sut(null), "null");
+    assert.equal(sut(null), "null");
   });
 
   it("should return `\"\"` for `null` with [TreatNullAsEmptyString]", () => {
-    assert.strictEqual(sut(null, { treatNullAsEmptyString: true }), "");
+    assert.equal(sut(null, { treatNullAsEmptyString: true }), "");
   });
 
   it("should return `\"true\"` for `true`", () => {
-    assert.strictEqual(sut(true), "true");
+    assert.equal(sut(true), "true");
   });
 
   it("should return `\"false\"` for `false`", () => {
-    assert.strictEqual(sut(false), "false");
+    assert.equal(sut(false), "false");
   });
 
   it("should return the correct number formatting for numbers", () => {
-    assert.strictEqual(sut(NaN), "NaN");
-    assert.strictEqual(sut(+0), "0");
-    assert.strictEqual(sut(-0), "0");
-    assert.strictEqual(sut(Infinity), "Infinity");
-    assert.strictEqual(sut(-Infinity), "-Infinity");
-    assert.strictEqual(sut(10), "10");
-    assert.strictEqual(sut(-10), "-10");
+    assert.equal(sut(NaN), "NaN");
+    assert.equal(sut(+0), "0");
+    assert.equal(sut(-0), "0");
+    assert.equal(sut(Infinity), "Infinity");
+    assert.equal(sut(-Infinity), "-Infinity");
+    assert.equal(sut(10), "10");
+    assert.equal(sut(-10), "-10");
   });
 
   it("should return the input for a string", () => {
-    assert.strictEqual(sut(""), "");
-    assert.strictEqual(sut("whee"), "whee");
+    assert.equal(sut(""), "");
+    assert.equal(sut("whee"), "whee");
   });
 
   it("should throw a TypeError for a symbol", () => {
@@ -53,7 +54,7 @@ function commonTest(sut) {
         return "foo";
       }
     };
-    assert.strictEqual(sut(o), "foo");
+    assert.equal(sut(o), "foo");
   });
 }
 
@@ -63,23 +64,23 @@ describe("WebIDL DOMString type", () => {
   commonTest(sut);
 
   it("should return the input for two-byte characters", () => {
-    assert.strictEqual(sut("中文"), "中文");
+    assert.equal(sut("中文"), "中文");
   });
 
   it("should return the input for valid Unicode surrogates", () => {
-    assert.strictEqual(sut("\uD83D\uDE00"), "\uD83D\uDE00");
+    assert.equal(sut("\uD83D\uDE00"), "\uD83D\uDE00");
   });
 
   it("should return the input for invalid Unicode surrogates", () => {
-    assert.strictEqual(sut("\uD83D"), "\uD83D");
-    assert.strictEqual(sut("\uD83Da"), "\uD83Da");
-    assert.strictEqual(sut("a\uD83D"), "a\uD83D");
-    assert.strictEqual(sut("a\uD83Da"), "a\uD83Da");
-    assert.strictEqual(sut("\uDE00"), "\uDE00");
-    assert.strictEqual(sut("\uDE00a"), "\uDE00a");
-    assert.strictEqual(sut("a\uDE00"), "a\uDE00");
-    assert.strictEqual(sut("a\uDE00a"), "a\uDE00a");
-    assert.strictEqual(sut("\uDE00\uD830"), "\uDE00\uD830");
+    assert.equal(sut("\uD83D"), "\uD83D");
+    assert.equal(sut("\uD83Da"), "\uD83Da");
+    assert.equal(sut("a\uD83D"), "a\uD83D");
+    assert.equal(sut("a\uD83Da"), "a\uD83Da");
+    assert.equal(sut("\uDE00"), "\uDE00");
+    assert.equal(sut("\uDE00a"), "\uDE00a");
+    assert.equal(sut("a\uDE00"), "a\uDE00");
+    assert.equal(sut("a\uDE00a"), "a\uDE00a");
+    assert.equal(sut("\uDE00\uD830"), "\uDE00\uD830");
   });
 });
 
@@ -115,22 +116,22 @@ describe("WebIDL USVString type", () => {
   commonTest(sut);
 
   it("should return the input for two-byte characters", () => {
-    assert.strictEqual(sut("中文"), "中文");
+    assert.equal(sut("中文"), "中文");
   });
 
   it("should return the input for valid Unicode surrogates", () => {
-    assert.strictEqual(sut("\uD83D\uDE00"), "\uD83D\uDE00");
+    assert.equal(sut("\uD83D\uDE00"), "\uD83D\uDE00");
   });
 
   it("should replace invalid Unicode surrogates with U+FFFD REPLACEMENT CHARACTER", () => {
-    assert.strictEqual(sut("\uD83D"), "\uFFFD");
-    assert.strictEqual(sut("\uD83Da"), "\uFFFDa");
-    assert.strictEqual(sut("a\uD83D"), "a\uFFFD");
-    assert.strictEqual(sut("a\uD83Da"), "a\uFFFDa");
-    assert.strictEqual(sut("\uDE00"), "\uFFFD");
-    assert.strictEqual(sut("\uDE00a"), "\uFFFDa");
-    assert.strictEqual(sut("a\uDE00"), "a\uFFFD");
-    assert.strictEqual(sut("a\uDE00a"), "a\uFFFDa");
-    assert.strictEqual(sut("\uDE00\uD830"), "\uFFFD\uFFFD");
+    assert.equal(sut("\uD83D"), "\uFFFD");
+    assert.equal(sut("\uD83Da"), "\uFFFDa");
+    assert.equal(sut("a\uD83D"), "a\uFFFD");
+    assert.equal(sut("a\uD83Da"), "a\uFFFDa");
+    assert.equal(sut("\uDE00"), "\uFFFD");
+    assert.equal(sut("\uDE00a"), "\uFFFDa");
+    assert.equal(sut("a\uDE00"), "a\uFFFD");
+    assert.equal(sut("a\uDE00a"), "a\uFFFDa");
+    assert.equal(sut("\uDE00\uD830"), "\uFFFD\uFFFD");
   });
 });

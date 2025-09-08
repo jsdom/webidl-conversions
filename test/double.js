@@ -1,54 +1,49 @@
 "use strict";
-const assert = require("assert");
+const { describe, it } = require("node:test");
+const assert = require("node:assert/strict");
 
 const conversions = require("..");
 const assertThrows = require("./helpers/assertThrows");
 
-function assertIs(actual, expected, message) {
-  if (!Object.is(actual, expected)) {
-    assert.fail(actual, expected, message, "is", assertIs);
-  }
-}
-
 function commonTest(sut) {
   it("should return `0` for `0`", () => {
-    assert.strictEqual(sut(0), 0);
+    assert.equal(sut(0), 0);
   });
 
   it("should return `-0` for `-0`", () => {
-    assertIs(sut(-0), -0);
+    assert.equal(sut(-0), -0);
   });
 
   it("should return `42` for `42`", () => {
-    assert.strictEqual(sut(42), 42);
+    assert.equal(sut(42), 42);
   });
 
   it("should return `0` for `null`", () => {
-    assert.strictEqual(sut(null), 0);
+    assert.equal(sut(null), 0);
   });
 
   it("should return `0` for `\"\"`", () => {
-    assert.strictEqual(sut(""), 0);
+    assert.equal(sut(""), 0);
   });
 
   it("should return `0` for `false`", () => {
-    assert.strictEqual(sut(0), 0);
+    assert.equal(sut(0), 0);
   });
 
   it("should return `1` for `true`", () => {
-    assert.strictEqual(sut(null), 0);
+    assert.equal(sut(null), 0);
   });
 
   it("should return `0` for random whitespace", () => {
-    assert.strictEqual(sut(" \t\n\t "), 0);
+    assert.equal(sut(" \t\n\t "), 0);
   });
 
   it("should return `123` for `\" 123 \"`", () => {
-    assert.strictEqual(sut(" 123 "), 123);
+    assert.equal(sut(" 123 "), 123);
   });
 
   it("should return `-123.5` for `\" -123.500 \"`", () => {
-    assert.strictEqual(sut(" -123.500 "), -123.5);
+    assert.equal(sut(" -123.500 "), -123.5);
   });
 
   it("should throw a TypeError for `0n`", () => {
@@ -96,11 +91,11 @@ function commonUnrestricted(sut) {
   });
 
   it("should return `+Infinity` for `+Infinity`", () => {
-    assert.strictEqual(sut(Infinity), Infinity);
+    assert.equal(sut(Infinity), Infinity);
   });
 
   it("should return `-Infinity` for `-Infinity`", () => {
-    assert.strictEqual(sut(-Infinity), -Infinity);
+    assert.equal(sut(-Infinity), -Infinity);
   });
 
   it("should return `NaN for `\" 123,123 \"` (since it becomes `NaN`)", () => {
@@ -110,21 +105,21 @@ function commonUnrestricted(sut) {
 
 function commonDouble(sut) {
   it("should return `3.5000000000000004` for `3.5000000000000004`", () => {
-    assert.strictEqual(sut(3.5000000000000004), 3.5000000000000004);
+    assert.equal(sut(3.5000000000000004), 3.5000000000000004);
   });
 
   it("should return `-3.5000000000000004` for `-3.5000000000000004`", () => {
-    assert.strictEqual(sut(-3.5000000000000004), -3.5000000000000004);
+    assert.equal(sut(-3.5000000000000004), -3.5000000000000004);
   });
 }
 
 function commonFloat(sut) {
   it("should return `3.5` for `3.5000000000000004`", () => {
-    assert.strictEqual(sut(3.5000000000000004), 3.5);
+    assert.equal(sut(3.5000000000000004), 3.5);
   });
 
   it("should return `-3.5` for `-3.5000000000000004`", () => {
-    assert.strictEqual(sut(-3.5000000000000004), -3.5);
+    assert.equal(sut(-3.5000000000000004), -3.5);
   });
 }
 
@@ -168,10 +163,10 @@ describe("WebIDL unrestricted float type", () => {
   commonFloat(sut);
 
   it("should return `Infinity` for `2 ** 128`", () => {
-    assert.strictEqual(sut(2 ** 128), Infinity);
+    assert.equal(sut(2 ** 128), Infinity);
   });
 
   it("should return `-Infinity` for `-(2 ** 128)`", () => {
-    assert.strictEqual(sut(-(2 ** 128)), -Infinity);
+    assert.equal(sut(-(2 ** 128)), -Infinity);
   });
 });

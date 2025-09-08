@@ -1,5 +1,6 @@
 "use strict";
-const assert = require("assert");
+const { describe, it } = require("node:test");
+const assert = require("node:assert/strict");
 
 const conversions = require("..");
 
@@ -7,6 +8,6 @@ describe("WebIDL DOMTimeStamp type", () => {
   const sut = conversions.DOMTimeStamp;
 
   it("should have the same conversion routine as unsigned long long type", () => {
-    assert.strictEqual(sut, conversions["unsigned long long"]);
+    assert.equal(sut, conversions["unsigned long long"]);
   });
 });

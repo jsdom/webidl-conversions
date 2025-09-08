@@ -1,7 +1,8 @@
 "use strict";
-const assert = require("assert");
-const vm = require("vm");
-const { MessageChannel } = require("worker_threads");
+const { describe, it } = require("node:test");
+const assert = require("node:assert/strict");
+const vm = require("node:vm");
+const { MessageChannel } = require("node:worker_threads");
 
 const assertThrows = require("./helpers/assertThrows");
 const conversions = require("..");
@@ -55,7 +56,7 @@ function commonNotOk(sut) {
 function testOk(name, sut, create) {
   it(`should return input for ${name}`, () => {
     const obj = create();
-    assert.strictEqual(sut(obj), obj);
+    assert.equal(sut(obj), obj);
   });
 }
 

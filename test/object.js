@@ -1,5 +1,6 @@
 "use strict";
-const assert = require("assert");
+const { describe, it } = require("node:test");
+const assert = require("node:assert/strict");
 
 const conversions = require("..");
 const assertThrows = require("./helpers/assertThrows");
@@ -9,12 +10,12 @@ describe("WebIDL object type", () => {
 
   it("should return `{}` for `{}`", () => {
     const obj = {};
-    assert.strictEqual(sut(obj), obj);
+    assert.equal(sut(obj), obj);
   });
 
   it("should return `() => {}` for `() => {}`", () => {
     const func = () => {};
-    assert.strictEqual(sut(func), func);
+    assert.equal(sut(func), func);
   });
 
   it("should throw a TypeError for `undefined`", () => {

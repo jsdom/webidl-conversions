@@ -18,11 +18,7 @@ export default [
   },
   {
     files: ["test/**.js"],
-    languageOptions: {
-      globals: { ...globals.mocha, ...globals.node }
-    },
     rules: {
-      "no-empty-function": "off",
       "func-style": "off"
     }
   }

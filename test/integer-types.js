@@ -1,5 +1,6 @@
 "use strict";
-const assert = require("assert");
+const { describe, it } = require("node:test");
+const assert = require("node:assert/strict");
 
 const conversions = require("..");
 const assertThrows = require("./helpers/assertThrows");
@@ -19,62 +20,56 @@ function stringifyNumber(num) {
   return String(num);
 }
 
-function assertIs(actual, expected) {
-  if (!Object.is(actual, expected)) {
-    assert.fail(`Input ${stringifyNumber(actual)} expected to be ${stringifyNumber(expected)}`);
-  }
-}
-
 function commonTest(sut) {
   it("should return 0 for 0", () => {
-    assertIs(sut(0), 0);
+    assert.equal(sut(0), 0);
   });
 
   it("should return 0 for -0", () => {
-    assertIs(sut(-0), 0);
+    assert.equal(sut(-0), 0);
   });
 
   it("should return 0 for -0 with [EnforceRange]", () => {
-    assertIs(sut(-0, { enforceRange: true }), 0);
+    assert.equal(sut(-0, { enforceRange: true }), 0);
   });
 
   it("should return 0 for -0 with [Clamp]", () => {
-    assertIs(sut(-0, { clamp: true }), 0);
+    assert.equal(sut(-0, { clamp: true }), 0);
   });
 
   it("should return 42 for 42", () => {
-    assertIs(sut(42), 42);
+    assert.equal(sut(42), 42);
   });
 
   it("should return 0 for null", () => {
-    assertIs(sut(null), 0);
+    assert.equal(sut(null), 0);
   });
 
   it("should return 0 for \"\"", () => {
-    assertIs(sut(""), 0);
+    assert.equal(sut(""), 0);
   });
 
   it("should return 0 for false", () => {
-    assertIs(sut(0), 0);
+    assert.equal(sut(0), 0);
   });
 
   it("should return 1 for true", () => {
-    assertIs(sut(null), 0);
+    assert.equal(sut(null), 0);
   });
 
   it("should return 0 for random whitespace", () => {
-    assertIs(sut(" \t\n\t "), 0);
+    assert.equal(sut(" \t\n\t "), 0);
   });
 
   it("should return 0 for \"123, 123\"", () => {
-    assertIs(sut("123,123"), 0);
+    assert.equal(sut("123,123"), 0);
   });
   it("should return 123 for \" 123 \"", () => {
-    assertIs(sut(" 123 "), 123);
+    assert.equal(sut(" 123 "), 123);
   });
 
   it("should return 123 for \" 123.400 \"", () => {
-    assertIs(sut(" 123.400 "), 123);
+    assert.equal(sut(" 123.400 "), 123);
   });
 
   it("should throw a TypeError for `0n`", () => {
@@ -84,15 +79,15 @@ function commonTest(sut) {
 
 function commonTestNonFinite(sut) {
   it("should return 0 for NaN", () => {
-    assertIs(sut(NaN), 0);
+    assert.equal(sut(NaN), 0);
   });
 
   it("should return 0 for +Infinity", () => {
-    assertIs(sut(Infinity), 0);
+    assert.equal(sut(Infinity), 0);
   });
 
   it("should return 0 for -Infinity", () => {
-    assertIs(sut(Infinity), 0);
+    assert.equal(sut(Infinity), 0);
   });
 
   it("should throw for NaN with [EnforceRange]", () => {
@@ -118,7 +113,7 @@ function generateTests(sut, testCases, options, extraLabel) {
       });
     } else {
       it(`should return ${stringifyNumber(expected)} for ${stringifyNumber(input)}${extraLabel}`, () => {
-        assertIs(sut(input, options), expected);
+        assert.equal(sut(input, options), expected);
       });
     }
   }
