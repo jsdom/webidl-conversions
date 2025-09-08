@@ -111,6 +111,13 @@ if (typeof SharedArrayBuffer === "function") {
     label: "SharedArrayBuffer same realm",
     creator: () => new SharedArrayBuffer(0)
   });
+  bufferSourceCreators.push({
+    typeName: "SharedArrayBuffer",
+    isShared: true,
+    isDetached: false,
+    label: "SharedArrayBuffer different realm",
+    creator: () => vm.runInContext(`new SharedArrayBuffer(0)`, differentRealm)
+  });
 }
 
 for (const constructor of bufferSourceConstructors) {
@@ -210,6 +217,27 @@ for (const type of bufferSourceConstructors) {
 
       commonNotOk(allowSharedSUT);
     });
+  });
+}
+
+if (typeof SharedArrayBuffer === "function") {
+  const typeName = "SharedArrayBuffer";
+  const sut = conversions[typeName];
+
+  describe(`WebIDL SharedArrayBuffer type`, () => {
+    for (const innerType of bufferSourceCreators) {
+      const testFunction =
+        innerType.typeName === typeName &&
+        innerType.isShared &&
+        !innerType.isDetached &&
+        !innerType.isForged ?
+          testOk :
+          testNotOk;
+
+      testFunction(innerType.label, sut, innerType.creator);
+    }
+
+    commonNotOk(sut);
   });
 }
 
