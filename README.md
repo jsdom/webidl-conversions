@@ -58,13 +58,11 @@ Conversions for all of the basic types from the Web IDL specification are implem
 - [`object`](https://webidl.spec.whatwg.org/#js-object)
 - [Buffer source types](https://webidl.spec.whatwg.org/#js-buffer-source-types), some of which can additionally be provided with the boolean options `{ allowShared, allowResizable }` as a second parameter
 
-Additionally, for convenience, the following derived type definitions are implemented:
+Additionally, for convenience, the following derived type definition is implemented:
 
 - [`ArrayBufferView`](https://webidl.spec.whatwg.org/#ArrayBufferView), which can additionally be provided with the boolean options `{ allowShared, allowResizable }` as a second parameter
-- [`BufferSource`](https://webidl.spec.whatwg.org/#BufferSource)
-- [`DOMTimeStamp`](https://webidl.spec.whatwg.org/#DOMTimeStamp)
 
-Derived types, such as nullable types, promise types, sequences, records, etc. are not handled by this library. You may wish to investigate the [webidl2js](https://github.com/jsdom/webidl2js) project.
+Other derived types, such as nullable types, promise types, sequences, records, etc. are not handled by this library. You may wish to investigate the [webidl2js](https://github.com/jsdom/webidl2js) project.
 
 ### A note on the `long long` types
 
@@ -74,9 +72,9 @@ To mitigate this, we could return the raw BigInt value from the conversion funct
 
 On the other hand, `long long` conversion is always accurate, since the input value can never be more precise than the output value.
 
-### A note on `BufferSource` types
+### A note on buffer source types
 
-All of the `BufferSource` types will throw when the relevant `ArrayBuffer` has been detached. This technically is not part of the [specified conversion algorithm](https://webidl.spec.whatwg.org/#js-buffer-source-types), but instead part of the [getting a reference/getting a copy](https://webidl.spec.whatwg.org/#ref-for-dfn-get-buffer-source-reference%E2%91%A0) algorithms. We've consolidated them here for convenience and ease of implementation, but if there is a need to separate them in the future, please open an issue so we can investigate.
+All of the buffer source types will throw when the relevant `ArrayBuffer` has been detached. This technically is not part of the [specified conversion algorithm](https://webidl.spec.whatwg.org/#js-buffer-source-types), but instead part of the [getting a reference/getting a copy](https://webidl.spec.whatwg.org/#ref-for-dfn-get-buffer-source-reference%E2%91%A0) algorithms. We've consolidated them here for convenience and ease of implementation, but if there is a need to separate them in the future, please open an issue so we can investigate.
 
 ## Background
 
