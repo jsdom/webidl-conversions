@@ -4,7 +4,6 @@ const vm = require("node:vm");
 
 const context = vm.createContext();
 const otherGlobals = {
-  Number: vm.runInContext("Number", context),
   String: vm.runInContext("String", context),
   TypeError: vm.runInContext("TypeError", context)
 };
