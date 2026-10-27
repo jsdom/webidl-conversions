@@ -32,14 +32,13 @@ If we are dealing with multiple JavaScript realms (such as those created using N
 ```js
 {
   globals: {
-    Number,
     String,
     TypeError
   }
 }
 ```
 
-Those specific functions will be used when throwing exceptions.
+Those functions are used for string conversion and explicit exception creation. Exceptions from native numeric coercion can still come from this package's realm.
 
 Specific conversions may also accept other options, the details of which can be found below.
 

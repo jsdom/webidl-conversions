@@ -49,6 +49,21 @@ function commonTest(sut) {
   it("should throw a TypeError for `0n`", () => {
     assertThrows(sut, [0n], TypeError);
   });
+
+  it("should throw a TypeError for a symbol", () => {
+    assertThrows(sut, [Symbol.iterator], TypeError);
+  });
+
+  for (const [name, value] of [
+    ["a boxed BigInt", Object(0n)],
+    ["a BigInt returned by valueOf", { valueOf: () => 0n }],
+    ["a BigInt returned by toString", { valueOf: () => ({}), toString: () => 0n }],
+    ["a BigInt returned by @@toPrimitive", { [Symbol.toPrimitive]: () => 0n }]
+  ]) {
+    it(`should throw a TypeError for ${name}`, () => {
+      assert.throws(() => sut(value), TypeError);
+    });
+  }
 }
 
 function commonRestricted(sut) {
