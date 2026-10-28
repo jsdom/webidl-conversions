@@ -43,7 +43,10 @@ describe("WebIDL boolean type", () => {
   it("should return `true` for objects", () => {
     assert.equal(sut({}), true);
     assert.equal(sut(Object.create(null)), true);
-    assert.equal(sut(() => { }), true);
+    assert.equal(
+      sut(() => {}),
+      true,
+    );
     assert.equal(sut(new Boolean(false)), true);
     assert.equal(sut(new Number(0)), true);
   });

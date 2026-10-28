@@ -6,23 +6,23 @@ const conversions = require("..");
 const assertThrows = require("./helpers/assertThrows");
 
 function commonTest(sut) {
-  it("should return `\"undefined\"` for `undefined`", () => {
+  it('should return `"undefined"` for `undefined`', () => {
     assert.equal(sut(undefined), "undefined");
   });
 
-  it("should return `\"null\"` for `null`", () => {
+  it('should return `"null"` for `null`', () => {
     assert.equal(sut(null), "null");
   });
 
-  it("should return `\"\"` for `null` with [TreatNullAsEmptyString]", () => {
+  it('should return `""` for `null` with [TreatNullAsEmptyString]', () => {
     assert.equal(sut(null, { treatNullAsEmptyString: true }), "");
   });
 
-  it("should return `\"true\"` for `true`", () => {
+  it('should return `"true"` for `true`', () => {
     assert.equal(sut(true), "true");
   });
 
-  it("should return `\"false\"` for `false`", () => {
+  it('should return `"false"` for `false`', () => {
     assert.equal(sut(false), "false");
   });
 
@@ -52,7 +52,7 @@ function commonTest(sut) {
       },
       toString() {
         return "foo";
-      }
+      },
     };
     assert.equal(sut(o), "foo");
   });

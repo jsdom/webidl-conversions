@@ -2,33 +2,39 @@
   "name": "webidl-conversions",
   "version": "8.0.1",
   "description": "Implements the WebIDL algorithms for converting to and from JavaScript values",
-  "main": "lib/index.js",
-  "scripts": {
-    "lint": "eslint .",
-    "test": "node --test",
-    "coverage": "c8 node --test --experimental-test-coverage test/*.js"
-  },
+  "keywords": [
+    "types",
+    "web",
+    "webidl"
+  ],
+  "license": "BSD-2-Clause",
+  "author": "Domenic Denicola <d@domenic.me> (https://domenic.me/)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jsdom/webidl-conversions.git"
   },
-  "keywords": [
-    "webidl",
-    "web",
-    "types"
-  ],
   "files": [
     "lib/"
   ],
-  "author": "Domenic Denicola <d@domenic.me> (https://domenic.me/)",
-  "license": "BSD-2-Clause",
+  "main": "lib/index.js",
+  "scripts": {
+    "check": "npm run lint && npm run fmt:check",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "test": "node --test",
+    "coverage": "c8 node --test --experimental-test-coverage test/*.js"
+  },
   "devDependencies": {
-    "@domenic/eslint-config": "^4.0.1",
+    "@domenic/eslint-config": "^6.0.0",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "c8": "^10.1.3",
-    "eslint": "^9.39.2",
-    "globals": "^17.0.0"
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0",
+    "oxfmt": "0.75.0"
   },
   "engines": {
-    "node": ">=20"
+    "node": "^22.14.0 || >=24.0.0"
   }
 }

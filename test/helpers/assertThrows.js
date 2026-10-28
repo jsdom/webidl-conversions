@@ -6,7 +6,7 @@ const context = vm.createContext();
 const otherGlobals = {
   Number: vm.runInContext("Number", context),
   String: vm.runInContext("String", context),
-  TypeError: vm.runInContext("TypeError", context)
+  TypeError: vm.runInContext("TypeError", context),
 };
 
 module.exports = (converter, args, exceptionType) => {
@@ -17,7 +17,7 @@ module.exports = (converter, args, exceptionType) => {
   assert.throws(() => {
     converter(value, {
       ...options,
-      globals: otherGlobals
+      globals: otherGlobals,
     });
   }, exceptionFromOtherContext);
 };

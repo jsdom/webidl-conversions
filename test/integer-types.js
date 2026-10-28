@@ -45,7 +45,7 @@ function commonTest(sut) {
     assert.equal(sut(null), 0);
   });
 
-  it("should return 0 for \"\"", () => {
+  it('should return 0 for ""', () => {
     assert.equal(sut(""), 0);
   });
 
@@ -61,14 +61,14 @@ function commonTest(sut) {
     assert.equal(sut(" \t\n\t "), 0);
   });
 
-  it("should return 0 for \"123, 123\"", () => {
+  it('should return 0 for "123, 123"', () => {
     assert.equal(sut("123,123"), 0);
   });
-  it("should return 123 for \" 123 \"", () => {
+  it('should return 123 for " 123 "', () => {
     assert.equal(sut(" 123 "), 123);
   });
 
-  it("should return 123 for \" 123.400 \"", () => {
+  it('should return 123 for " 123.400 "', () => {
     assert.equal(sut(" 123.400 "), 123);
   });
 
@@ -150,44 +150,54 @@ describe("WebIDL byte type", () => {
     [-3.5, -3],
     [-128, -128],
     [-129, 127],
-    [-130, 126]
+    [-130, 126],
   ]);
 
-  generateTests(sut, [
-    [-128, -128],
-    [-129, -128],
-    [-10000, -128],
-    [-Infinity, -128],
-    [127, 127],
-    [128, 127],
-    [10000, 127],
-    [Infinity, 127],
-    [3.5, 4],
-    [2.5, 2],
-    [1.5, 2],
-    [0.8, 1],
-    [0.5, 0],
-    [0.2, 0],
-    [-0.2, 0],
-    [-0.5, 0],
-    [-0.8, -1],
-    [-1.2, -1],
-    [-1.5, -2],
-    [-1.8, -2],
-    [-2.5, -2],
-    [-2.8, -3]
-  ], { clamp: true }, "with [Clamp]");
+  generateTests(
+    sut,
+    [
+      [-128, -128],
+      [-129, -128],
+      [-10000, -128],
+      [-Infinity, -128],
+      [127, 127],
+      [128, 127],
+      [10000, 127],
+      [Infinity, 127],
+      [3.5, 4],
+      [2.5, 2],
+      [1.5, 2],
+      [0.8, 1],
+      [0.5, 0],
+      [0.2, 0],
+      [-0.2, 0],
+      [-0.5, 0],
+      [-0.8, -1],
+      [-1.2, -1],
+      [-1.5, -2],
+      [-1.8, -2],
+      [-2.5, -2],
+      [-2.8, -3],
+    ],
+    { clamp: true },
+    "with [Clamp]",
+  );
 
-  generateTests(sut, [
-    [-128, -128],
-    [-128.8, -128],
-    [-129, TypeError],
-    [-10000, TypeError],
-    [127, 127],
-    [127.8, 127],
-    [128, TypeError],
-    [10000, TypeError]
-  ], { enforceRange: true }, "with [EnforceRange]");
+  generateTests(
+    sut,
+    [
+      [-128, -128],
+      [-128.8, -128],
+      [-129, TypeError],
+      [-10000, TypeError],
+      [127, 127],
+      [127.8, 127],
+      [128, TypeError],
+      [10000, TypeError],
+    ],
+    { enforceRange: true },
+    "with [EnforceRange]",
+  );
 });
 
 describe("WebIDL octet type", () => {
@@ -222,42 +232,52 @@ describe("WebIDL octet type", () => {
     [-2, 254],
     [-2.5, 254],
     [-3.5, 253],
-    [-128, 128]
+    [-128, 128],
   ]);
 
-  generateTests(sut, [
-    [-1, 0],
-    [-255, 0],
-    [-256, 0],
-    [-1000, 0],
-    [-Infinity, 0],
-    [127, 127],
-    [128, 128],
-    [255, 255],
-    [256, 255],
-    [10000, 255],
-    [Infinity, 255],
-    [3.5, 4],
-    [2.5, 2],
-    [1.5, 2],
-    [0.8, 1],
-    [0.5, 0],
-    [0.2, 0],
-    [-0.2, 0],
-    [-0.5, 0],
-    [-0.8, 0]
-  ], { clamp: true }, "with [Clamp]");
+  generateTests(
+    sut,
+    [
+      [-1, 0],
+      [-255, 0],
+      [-256, 0],
+      [-1000, 0],
+      [-Infinity, 0],
+      [127, 127],
+      [128, 128],
+      [255, 255],
+      [256, 255],
+      [10000, 255],
+      [Infinity, 255],
+      [3.5, 4],
+      [2.5, 2],
+      [1.5, 2],
+      [0.8, 1],
+      [0.5, 0],
+      [0.2, 0],
+      [-0.2, 0],
+      [-0.5, 0],
+      [-0.8, 0],
+    ],
+    { clamp: true },
+    "with [Clamp]",
+  );
 
-  generateTests(sut, [
-    [-256, TypeError],
-    [-1, TypeError],
-    [-0.8, 0],
-    [0, 0],
-    [255, 255],
-    [255.8, 255],
-    [256, TypeError],
-    [10000, TypeError]
-  ], { enforceRange: true }, "with [EnforceRange]");
+  generateTests(
+    sut,
+    [
+      [-256, TypeError],
+      [-1, TypeError],
+      [-0.8, 0],
+      [0, 0],
+      [255, 255],
+      [255.8, 255],
+      [256, TypeError],
+      [10000, TypeError],
+    ],
+    { enforceRange: true },
+    "with [EnforceRange]",
+  );
 });
 
 describe("WebIDL short type", () => {
@@ -274,28 +294,38 @@ describe("WebIDL short type", () => {
     [-32769, 32767],
     [-32770, 32766],
     [65536, 0],
-    [65537, 1]
+    [65537, 1],
   ]);
 
-  generateTests(sut, [
-    [-32768, -32768],
-    [-32769, -32768],
-    [-1000000, -32768],
-    [-Infinity, -32768],
-    [32767, 32767],
-    [32768, 32767],
-    [1000000, 32767],
-    [Infinity, 32767]
-  ], { clamp: true }, "with [Clamp]");
+  generateTests(
+    sut,
+    [
+      [-32768, -32768],
+      [-32769, -32768],
+      [-1000000, -32768],
+      [-Infinity, -32768],
+      [32767, 32767],
+      [32768, 32767],
+      [1000000, 32767],
+      [Infinity, 32767],
+    ],
+    { clamp: true },
+    "with [Clamp]",
+  );
 
-  generateTests(sut, [
-    [-32768, -32768],
-    [-32769, TypeError],
-    [-100000, TypeError],
-    [32767, 32767],
-    [32768, TypeError],
-    [100000, TypeError]
-  ], { enforceRange: true }, "with [EnforceRange]");
+  generateTests(
+    sut,
+    [
+      [-32768, -32768],
+      [-32769, TypeError],
+      [-100000, TypeError],
+      [32767, 32767],
+      [32768, TypeError],
+      [100000, TypeError],
+    ],
+    { enforceRange: true },
+    "with [EnforceRange]",
+  );
 });
 
 describe("WebIDL unsigned short type", () => {
@@ -314,31 +344,41 @@ describe("WebIDL unsigned short type", () => {
     [65537, 1],
     [131072, 0],
     [-1, 65535],
-    [-2, 65534]
+    [-2, 65534],
   ]);
 
-  generateTests(sut, [
-    [-1, 0],
-    [-32767, 0],
-    [-32768, 0],
-    [-100000, 0],
-    [-Infinity, 0],
-    [32767, 32767],
-    [32768, 32768],
-    [65535, 65535],
-    [65536, 65535],
-    [100000, 65535],
-    [Infinity, 65535]
-  ], { clamp: true }, "with [Clamp]");
+  generateTests(
+    sut,
+    [
+      [-1, 0],
+      [-32767, 0],
+      [-32768, 0],
+      [-100000, 0],
+      [-Infinity, 0],
+      [32767, 32767],
+      [32768, 32768],
+      [65535, 65535],
+      [65536, 65535],
+      [100000, 65535],
+      [Infinity, 65535],
+    ],
+    { clamp: true },
+    "with [Clamp]",
+  );
 
-  generateTests(sut, [
-    [-65536, TypeError],
-    [-1, TypeError],
-    [0, 0],
-    [65535, 65535],
-    [65536, TypeError],
-    [100000, TypeError]
-  ], { enforceRange: true }, "with [EnforceRange]");
+  generateTests(
+    sut,
+    [
+      [-65536, TypeError],
+      [-1, TypeError],
+      [0, 0],
+      [65535, 65535],
+      [65536, TypeError],
+      [100000, TypeError],
+    ],
+    { enforceRange: true },
+    "with [EnforceRange]",
+  );
 });
 
 describe("WebIDL long type", () => {
@@ -355,28 +395,38 @@ describe("WebIDL long type", () => {
     [-2147483649, 2147483647],
     [-2147483650, 2147483646],
     [4294967296, 0],
-    [4294967297, 1]
+    [4294967297, 1],
   ]);
 
-  generateTests(sut, [
-    [-2147483648, -2147483648],
-    [-2147483649, -2147483648],
-    [-10000000000, -2147483648],
-    [-Infinity, -2147483648],
-    [2147483647, 2147483647],
-    [2147483648, 2147483647],
-    [10000000000, 2147483647],
-    [Infinity, 2147483647]
-  ], { clamp: true }, "with [Clamp]");
+  generateTests(
+    sut,
+    [
+      [-2147483648, -2147483648],
+      [-2147483649, -2147483648],
+      [-10000000000, -2147483648],
+      [-Infinity, -2147483648],
+      [2147483647, 2147483647],
+      [2147483648, 2147483647],
+      [10000000000, 2147483647],
+      [Infinity, 2147483647],
+    ],
+    { clamp: true },
+    "with [Clamp]",
+  );
 
-  generateTests(sut, [
-    [-2147483648, -2147483648],
-    [-2147483649, TypeError],
-    [-10000000000, TypeError],
-    [2147483647, 2147483647],
-    [2147483648, TypeError],
-    [10000000000, TypeError]
-  ], { enforceRange: true }, "with [EnforceRange]");
+  generateTests(
+    sut,
+    [
+      [-2147483648, -2147483648],
+      [-2147483649, TypeError],
+      [-10000000000, TypeError],
+      [2147483647, 2147483647],
+      [2147483648, TypeError],
+      [10000000000, TypeError],
+    ],
+    { enforceRange: true },
+    "with [EnforceRange]",
+  );
 });
 
 describe("WebIDL unsigned long type", () => {
@@ -395,31 +445,41 @@ describe("WebIDL unsigned long type", () => {
     [4294967297, 1],
     [8589934592, 0],
     [-1, 4294967295],
-    [-2, 4294967294]
+    [-2, 4294967294],
   ]);
 
-  generateTests(sut, [
-    [-1, 0],
-    [-4294967295, 0],
-    [-4294967296, 0],
-    [-10000000000, 0],
-    [-Infinity, 0],
-    [2147483647, 2147483647],
-    [2147483648, 2147483648],
-    [4294967295, 4294967295],
-    [4294967296, 4294967295],
-    [10000000000, 4294967295],
-    [Infinity, 4294967295]
-  ], { clamp: true }, "with [Clamp]");
+  generateTests(
+    sut,
+    [
+      [-1, 0],
+      [-4294967295, 0],
+      [-4294967296, 0],
+      [-10000000000, 0],
+      [-Infinity, 0],
+      [2147483647, 2147483647],
+      [2147483648, 2147483648],
+      [4294967295, 4294967295],
+      [4294967296, 4294967295],
+      [10000000000, 4294967295],
+      [Infinity, 4294967295],
+    ],
+    { clamp: true },
+    "with [Clamp]",
+  );
 
-  generateTests(sut, [
-    [-4294967296, TypeError],
-    [-1, TypeError],
-    [0, 0],
-    [4294967295, 4294967295],
-    [4294967296, TypeError],
-    [10000000000, TypeError]
-  ], { enforceRange: true }, "with [EnforceRange]");
+  generateTests(
+    sut,
+    [
+      [-4294967296, TypeError],
+      [-1, TypeError],
+      [0, 0],
+      [4294967295, 4294967295],
+      [4294967296, TypeError],
+      [10000000000, TypeError],
+    ],
+    { enforceRange: true },
+    "with [EnforceRange]",
+  );
 });
 
 describe("WebIDL long long type", () => {
@@ -442,45 +502,55 @@ describe("WebIDL long long type", () => {
     [-9007199254740991, -9007199254740991], // -(2**53 - 1) = Number.MIN_SAFE_INTEGER
     [-9007199254740992, -9007199254740992], // -(2**53)
     [-18446744073709551616, 0], // -(2**64)
-    [-18446744073709555712, -4096] // -(2**64 + 2**12)
+    [-18446744073709555712, -4096], // -(2**64 + 2**12)
   ]);
 
   describe("[Clamp]", () => {
-    generateTests(sut, [
-      [4294967296, 4294967296], // 2**32
-      [9007199254740991, Number.MAX_SAFE_INTEGER], // 2**53 - 1 = Number.MAX_SAFE_INTEGER
-      [9007199254740992, Number.MAX_SAFE_INTEGER], // 2**53
-      [9007199254740994, Number.MAX_SAFE_INTEGER], // 2**53 + 2
-      [4611686018427387904, Number.MAX_SAFE_INTEGER], // 2**62
-      [9223372036854775808, Number.MAX_SAFE_INTEGER], // 2**63
-      [9223372036854777856, Number.MAX_SAFE_INTEGER], // 2**63 + 2**11
-      [18446744073709551616, Number.MAX_SAFE_INTEGER], // 2**64
-      [18446744073709555712, Number.MAX_SAFE_INTEGER], // 2**64 + 2**12
-      [-4294967296, -4294967296], // -2**32
-      [-9007199254740991, Number.MIN_SAFE_INTEGER], // -(2**53 - 1) = Number.MIN_SAFE_INTEGER
-      [-9007199254740992, Number.MIN_SAFE_INTEGER], // -(2**53)
-      [-18446744073709551616, Number.MIN_SAFE_INTEGER], // -(2**64)
-      [-18446744073709555712, Number.MIN_SAFE_INTEGER] // -(2**64 + 2**12)
-    ], { clamp: true }, "with [Clamp]");
+    generateTests(
+      sut,
+      [
+        [4294967296, 4294967296], // 2**32
+        [9007199254740991, Number.MAX_SAFE_INTEGER], // 2**53 - 1 = Number.MAX_SAFE_INTEGER
+        [9007199254740992, Number.MAX_SAFE_INTEGER], // 2**53
+        [9007199254740994, Number.MAX_SAFE_INTEGER], // 2**53 + 2
+        [4611686018427387904, Number.MAX_SAFE_INTEGER], // 2**62
+        [9223372036854775808, Number.MAX_SAFE_INTEGER], // 2**63
+        [9223372036854777856, Number.MAX_SAFE_INTEGER], // 2**63 + 2**11
+        [18446744073709551616, Number.MAX_SAFE_INTEGER], // 2**64
+        [18446744073709555712, Number.MAX_SAFE_INTEGER], // 2**64 + 2**12
+        [-4294967296, -4294967296], // -2**32
+        [-9007199254740991, Number.MIN_SAFE_INTEGER], // -(2**53 - 1) = Number.MIN_SAFE_INTEGER
+        [-9007199254740992, Number.MIN_SAFE_INTEGER], // -(2**53)
+        [-18446744073709551616, Number.MIN_SAFE_INTEGER], // -(2**64)
+        [-18446744073709555712, Number.MIN_SAFE_INTEGER], // -(2**64 + 2**12)
+      ],
+      { clamp: true },
+      "with [Clamp]",
+    );
   });
 
   describe("[EnforceRange]", () => {
-    generateTests(sut, [
-      [4294967296, 4294967296], // 2**32
-      [9007199254740991, Number.MAX_SAFE_INTEGER], // 2**53 - 1 = Number.MAX_SAFE_INTEGER
-      [9007199254740992, TypeError], // 2**53
-      [9007199254740994, TypeError], // 2**53 + 2
-      [4611686018427387904, TypeError], // 2**62
-      [9223372036854775808, TypeError], // 2**63
-      [9223372036854777856, TypeError], // 2**63 + 2**11
-      [18446744073709551616, TypeError], // 2**64
-      [18446744073709555712, TypeError], // 2**64 + 2**12
-      [-4294967296, -4294967296], // -2**32
-      [-9007199254740991, Number.MIN_SAFE_INTEGER], // -(2**53 - 1) = Number.MIN_SAFE_INTEGER
-      [-9007199254740992, TypeError], // -(2**53)
-      [-18446744073709551616, TypeError], // -(2**64)
-      [-18446744073709555712, TypeError] // -(2**64 + 2**12)
-    ], { enforceRange: true }, "with [EnforceRange]");
+    generateTests(
+      sut,
+      [
+        [4294967296, 4294967296], // 2**32
+        [9007199254740991, Number.MAX_SAFE_INTEGER], // 2**53 - 1 = Number.MAX_SAFE_INTEGER
+        [9007199254740992, TypeError], // 2**53
+        [9007199254740994, TypeError], // 2**53 + 2
+        [4611686018427387904, TypeError], // 2**62
+        [9223372036854775808, TypeError], // 2**63
+        [9223372036854777856, TypeError], // 2**63 + 2**11
+        [18446744073709551616, TypeError], // 2**64
+        [18446744073709555712, TypeError], // 2**64 + 2**12
+        [-4294967296, -4294967296], // -2**32
+        [-9007199254740991, Number.MIN_SAFE_INTEGER], // -(2**53 - 1) = Number.MIN_SAFE_INTEGER
+        [-9007199254740992, TypeError], // -(2**53)
+        [-18446744073709551616, TypeError], // -(2**64)
+        [-18446744073709555712, TypeError], // -(2**64 + 2**12)
+      ],
+      { enforceRange: true },
+      "with [EnforceRange]",
+    );
   });
 });
 
@@ -504,44 +574,54 @@ describe("WebIDL unsigned long long type", () => {
     [-9007199254740991, 18437736874454810624], // -(2**53 - 1) = Number.MIN_SAFE_INTEGER
     [-9007199254740992, 18437736874454810624], // -(2**53)
     [-18446744073709551616, 0], // -(2**64)
-    [-18446744073709555712, 18446744073709547520] // -(2**64 + 2**12)
+    [-18446744073709555712, 18446744073709547520], // -(2**64 + 2**12)
   ]);
 
   describe("[Clamp]", () => {
-    generateTests(sut, [
-      [4294967296, 4294967296], // 2**32
-      [9007199254740991, Number.MAX_SAFE_INTEGER], // 2**53 - 1 = Number.MAX_SAFE_INTEGER
-      [9007199254740992, Number.MAX_SAFE_INTEGER], // 2**53
-      [9007199254740994, Number.MAX_SAFE_INTEGER], // 2**53 + 2
-      [4611686018427387904, Number.MAX_SAFE_INTEGER], // 2**62
-      [9223372036854775808, Number.MAX_SAFE_INTEGER], // 2**63
-      [9223372036854777856, Number.MAX_SAFE_INTEGER], // 2**63 + 2**11
-      [18446744073709551616, Number.MAX_SAFE_INTEGER], // 2**64
-      [18446744073709555712, Number.MAX_SAFE_INTEGER], // 2**64 + 2**12
-      [-4294967296, 0], // -2**32
-      [-9007199254740991, 0], // -(2**53 - 1) = Number.MIN_SAFE_INTEGER
-      [-9007199254740992, 0], // -(2**53)
-      [-18446744073709551616, 0], // -(2**64)
-      [-18446744073709555712, 0] // -(2**64 + 2**12)
-    ], { clamp: true }, "with [Clamp]");
+    generateTests(
+      sut,
+      [
+        [4294967296, 4294967296], // 2**32
+        [9007199254740991, Number.MAX_SAFE_INTEGER], // 2**53 - 1 = Number.MAX_SAFE_INTEGER
+        [9007199254740992, Number.MAX_SAFE_INTEGER], // 2**53
+        [9007199254740994, Number.MAX_SAFE_INTEGER], // 2**53 + 2
+        [4611686018427387904, Number.MAX_SAFE_INTEGER], // 2**62
+        [9223372036854775808, Number.MAX_SAFE_INTEGER], // 2**63
+        [9223372036854777856, Number.MAX_SAFE_INTEGER], // 2**63 + 2**11
+        [18446744073709551616, Number.MAX_SAFE_INTEGER], // 2**64
+        [18446744073709555712, Number.MAX_SAFE_INTEGER], // 2**64 + 2**12
+        [-4294967296, 0], // -2**32
+        [-9007199254740991, 0], // -(2**53 - 1) = Number.MIN_SAFE_INTEGER
+        [-9007199254740992, 0], // -(2**53)
+        [-18446744073709551616, 0], // -(2**64)
+        [-18446744073709555712, 0], // -(2**64 + 2**12)
+      ],
+      { clamp: true },
+      "with [Clamp]",
+    );
   });
 
   describe("[EnforceRange]", () => {
-    generateTests(sut, [
-      [4294967296, 4294967296], // 2**32
-      [9007199254740991, Number.MAX_SAFE_INTEGER], // 2**53 - 1 = Number.MAX_SAFE_INTEGER
-      [9007199254740992, TypeError], // 2**53
-      [9007199254740994, TypeError], // 2**53 + 2
-      [4611686018427387904, TypeError], // 2**62
-      [9223372036854775808, TypeError], // 2**63
-      [9223372036854777856, TypeError], // 2**63 + 2**11
-      [18446744073709551616, TypeError], // 2**64
-      [18446744073709555712, TypeError], // 2**64 + 2**12
-      [-4294967296, TypeError], // -2**32
-      [-9007199254740991, TypeError], // -(2**53 - 1) = Number.MIN_SAFE_INTEGER
-      [-9007199254740992, TypeError], // -(2**53)
-      [-18446744073709551616, TypeError], // -(2**64)
-      [-18446744073709555712, TypeError] // -(2**64 + 2**12)
-    ], { enforceRange: true }, "with [EnforceRange]");
+    generateTests(
+      sut,
+      [
+        [4294967296, 4294967296], // 2**32
+        [9007199254740991, Number.MAX_SAFE_INTEGER], // 2**53 - 1 = Number.MAX_SAFE_INTEGER
+        [9007199254740992, TypeError], // 2**53
+        [9007199254740994, TypeError], // 2**53 + 2
+        [4611686018427387904, TypeError], // 2**62
+        [9223372036854775808, TypeError], // 2**63
+        [9223372036854777856, TypeError], // 2**63 + 2**11
+        [18446744073709551616, TypeError], // 2**64
+        [18446744073709555712, TypeError], // 2**64 + 2**12
+        [-4294967296, TypeError], // -2**32
+        [-9007199254740991, TypeError], // -(2**53 - 1) = Number.MIN_SAFE_INTEGER
+        [-9007199254740992, TypeError], // -(2**53)
+        [-18446744073709551616, TypeError], // -(2**64)
+        [-18446744073709555712, TypeError], // -(2**64 + 2**12)
+      ],
+      { enforceRange: true },
+      "with [EnforceRange]",
+    );
   });
 });

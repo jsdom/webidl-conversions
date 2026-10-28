@@ -22,7 +22,7 @@ function commonTest(sut) {
     assert.equal(sut(null), 0);
   });
 
-  it("should return `0` for `\"\"`", () => {
+  it('should return `0` for `""`', () => {
     assert.equal(sut(""), 0);
   });
 
@@ -38,11 +38,11 @@ function commonTest(sut) {
     assert.equal(sut(" \t\n\t "), 0);
   });
 
-  it("should return `123` for `\" 123 \"`", () => {
+  it('should return `123` for `" 123 "`', () => {
     assert.equal(sut(" 123 "), 123);
   });
 
-  it("should return `-123.5` for `\" -123.500 \"`", () => {
+  it('should return `-123.5` for `" -123.500 "`', () => {
     assert.equal(sut(" -123.500 "), -123.5);
   });
 
@@ -72,7 +72,7 @@ function commonRestricted(sut) {
     assertThrows(sut, [-Infinity], TypeError);
   });
 
-  it("should throw a TypeError for `\" 123,123 \"` (since it becomes `NaN`)", () => {
+  it('should throw a TypeError for `" 123,123 "` (since it becomes `NaN`)', () => {
     assertThrows(sut, [" 123,123 "], TypeError);
   });
 }
@@ -98,7 +98,7 @@ function commonUnrestricted(sut) {
     assert.equal(sut(-Infinity), -Infinity);
   });
 
-  it("should return `NaN for `\" 123,123 \"` (since it becomes `NaN`)", () => {
+  it('should return `NaN for `" 123,123 "` (since it becomes `NaN`)', () => {
     assert(isNaN(sut(" 123,123 ")));
   });
 }
