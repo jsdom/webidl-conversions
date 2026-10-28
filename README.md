@@ -9,9 +9,9 @@ The goal is that you should be able to write code like
 const conversions = require("webidl-conversions");
 
 function doStuff(x, y) {
-    x = conversions["boolean"](x);
-    y = conversions["unsigned long"](y);
-    // actual algorithm code here
+  x = conversions["boolean"](x);
+  y = conversions["unsigned long"](y);
+  // actual algorithm code here
 }
 ```
 
@@ -30,13 +30,13 @@ Each method also accepts a second, optional, parameter for miscellaneous options
 If we are dealing with multiple JavaScript realms (such as those created using Node.js' [vm](https://nodejs.org/api/vm.html) module or the HTML `iframe` element), and exceptions from another realm need to be thrown, one can supply an object option `globals` containing the following properties:
 
 ```js
-{
+const options = {
   globals: {
     Number,
     String,
-    TypeError
-  }
-}
+    TypeError,
+  },
+};
 ```
 
 Those specific functions will be used when throwing exceptions.
